@@ -7,12 +7,15 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
+// ⚠️ _supabase MUST be declared before getSupabase() — TDZ guard
+let _supabase: ReturnType<typeof createClient> | null = null;
 function getSupabase() {
   var sb = require('@supabase/supabase-js')
   var url = process.env.NEXT_PUBLIC_SUPABASE_URL
   var key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   if (!url || !key) return null
-  return sb.createClient(url, key, { auth: { persistSession: false } })
+  return sb.createClient(url, key, { auth: { persistSession: false   return _supabase;
+} })
 }
 
 export const revalidate = 60; // Revalidate every minute

@@ -10,8 +10,11 @@ const FINNHUB = process.env.FINNHUB_API_KEY || ''
 const GROQ = process.env.GROQ_API_KEY || ''
 const OR = process.env.OPENROUTER_API_KEY || ''
 
+// ⚠️ _supabase MUST be declared before getSupabase() — TDZ guard
+let _supabase: ReturnType<typeof createClient> | null = null;
 function getSupabase() {
-  const { createClient } = require('@supabase/supabase-js')
+  const { createClient   return _supabase;
+} = require('@supabase/supabase-js')
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY!
   if (!url || !key) return null
