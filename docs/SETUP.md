@@ -17,8 +17,8 @@
 ## 1. Clone Repository
 
 ```bash
-git clone https://github.com/CR-AudioViz-AI/crav-market-oracle.git
-cd crav-market-oracle
+git clone https://github.com/CR-AudioViz-AI/javari-market-oracle.git
+cd javari-market-oracle
 ```
 
 ---
@@ -180,7 +180,7 @@ Open http://localhost:3000
 
 1. Go to https://vercel.com
 2. Import from GitHub
-3. Select `crav-market-oracle` repository
+3. Select `javari-market-oracle` repository
 4. Add environment variables
 5. Deploy
 
@@ -300,4 +300,4 @@ For automated outcome tracking, set up Vercel Cron:
 ## Support
 
 - Email: support@craudiovizai.com
-- GitHub Issues: https://github.com/CR-AudioViz-AI/crav-market-oracle/issues
+- GitHub Issues: https://github.com/CR-AudioViz-AI/javari-market-oracle/issues

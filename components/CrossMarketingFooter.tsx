@@ -7,10 +7,10 @@ interface CrossMarketingFooterProps {
 }
 
 const APPS = [
-  { id: 'logo-studio', name: 'Logo Studio', icon: <Palette className="w-4 h-4" />, url: 'https://crav-logo-studio.vercel.app', color: 'from-violet-500 to-purple-500' },
-  { id: 'social-graphics', name: 'Social Graphics', icon: <Image className="w-4 h-4" />, url: 'https://crav-social-graphics.vercel.app', color: 'from-pink-500 to-rose-500' },
-  { id: 'invoice-generator', name: 'Invoices', icon: <FileText className="w-4 h-4" />, url: 'https://crav-invoice-generator.vercel.app', color: 'from-emerald-500 to-green-500' },
-  { id: 'market-oracle', name: 'Market Oracle', icon: <TrendingUp className="w-4 h-4" />, url: 'https://crav-market-oracle.vercel.app', color: 'from-cyan-500 to-blue-500' },
+  { id: 'logo-studio', name: 'Logo Studio', icon: <Palette className="w-4 h-4" />, url: 'https://javarilogo.com/brand', color: 'from-violet-500 to-purple-500' },
+  { id: 'social-graphics', name: 'Social Graphics', icon: <Image className="w-4 h-4" />, url: 'https://craudiovizai.com/apps/social-graphics', color: 'from-pink-500 to-rose-500' },
+  { id: 'invoice-generator', name: 'Invoices', icon: <FileText className="w-4 h-4" />, url: 'https://craudiovizai.com/apps/invoice-generator', color: 'from-emerald-500 to-green-500' },
+  { id: 'market-oracle', name: 'Market Oracle', icon: <TrendingUp className="w-4 h-4" />, url: 'https://craudiovizai.com/apps/market-oracle', color: 'from-cyan-500 to-blue-500' },
 ]
 
 export default function CrossMarketingFooter({ currentApp = '' }: CrossMarketingFooterProps) {

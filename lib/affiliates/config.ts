@@ -24,7 +24,7 @@ export const AFFILIATE_PROGRAMS: Record<string, AffiliateProgram> = {
     commission: '22%',
     type: 'recurring',
     category: 'ai-voice',
-    platforms: ['javari-ai', 'crav-website', 'audio-tools'],
+    platforms: ['javari-ai', 'javari-website', 'audio-tools'],
     badge: 'Premium Voices',
     description: 'AI voice synthesis with 1000+ professional voices'
   },
@@ -37,7 +37,7 @@ export const AFFILIATE_PROGRAMS: Record<string, AffiliateProgram> = {
     commission: '8%',
     type: 'per-booking',
     category: 'travel',
-    platforms: ['orlando-trip-deal', 'crav-website'],
+    platforms: ['orlando-trip-deal', 'javari-website'],
     badge: 'Best Tours',
     description: 'Tours and activities worldwide'
   },
@@ -48,7 +48,7 @@ export const AFFILIATE_PROGRAMS: Record<string, AffiliateProgram> = {
     commission: '8%',
     type: 'per-booking',
     category: 'travel',
-    platforms: ['orlando-trip-deal', 'crav-website'],
+    platforms: ['orlando-trip-deal', 'javari-website'],
     description: 'Tours, attractions, and experiences'
   },
   klook: {
@@ -68,7 +68,7 @@ export const AFFILIATE_PROGRAMS: Record<string, AffiliateProgram> = {
     commission: '3% lifetime',
     type: 'recurring',
     category: 'travel',
-    platforms: ['orlando-trip-deal', 'crav-website'],
+    platforms: ['orlando-trip-deal', 'javari-website'],
     description: 'Car rental comparison'
   },
   squaremouth: {
@@ -90,7 +90,7 @@ export const AFFILIATE_PROGRAMS: Record<string, AffiliateProgram> = {
     commission: '10%',
     type: 'recurring',
     category: 'pod',
-    platforms: ['market-forge', 'crav-website'],
+    platforms: ['market-forge', 'javari-website'],
     badge: 'Create & Sell',
     description: 'Print on demand products - t-shirts, mugs, posters'
   },
@@ -115,7 +115,7 @@ export const AFFILIATE_PROGRAMS: Record<string, AffiliateProgram> = {
     commission: '25%',
     type: 'recurring',
     category: 'real-estate',
-    platforms: ['cr-realtor-platform', 'crav-property-management'],
+    platforms: ['cr-realtor-platform', 'javari-property-management'],
     description: 'Property management software'
   },
   turbotenant: {
@@ -125,7 +125,7 @@ export const AFFILIATE_PROGRAMS: Record<string, AffiliateProgram> = {
     commission: '$40/customer',
     type: 'one-time',
     category: 'real-estate',
-    platforms: ['cr-realtor-platform', 'crav-property-management'],
+    platforms: ['cr-realtor-platform', 'javari-property-management'],
     description: 'Landlord software - tenant screening, rent collection'
   }
 };

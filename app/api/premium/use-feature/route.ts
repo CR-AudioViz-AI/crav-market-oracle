@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
 
     // Check user credits
     const { data: credits, error: creditsError } = await supabase
-      .from("craiverse_credits")
+      .from("javariverse_credits")
       .select("balance")
       .eq("user_id", user_id)
       .single();
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Log usage
-    await supabase.from("craiverse_app_usage").insert({
+    await supabase.from("javariverse_app_usage").insert({
       user_id,
       app_slug: "market-oracle",
       feature_used: feature,

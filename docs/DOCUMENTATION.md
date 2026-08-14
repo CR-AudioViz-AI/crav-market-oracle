@@ -23,11 +23,11 @@ Last Updated: December 15, 2025
 ## 🚀 Quick Links
 
 ### Live Product
-- **Landing Page**: https://crav-market-oracle.vercel.app
-- **Dashboard**: https://crav-market-oracle.vercel.app/ai-picks
+- **Landing Page**: https://craudiovizai.com/apps/market-oracle
+- **Dashboard**: https://craudiovizai.com/apps/market-oracle/ai-picks
 
 ### GitHub
-- **Repository**: https://github.com/CR-AudioViz-AI/crav-market-oracle
+- **Repository**: https://github.com/CR-AudioViz-AI/javari-market-oracle
 
 ### External
 - **Supabase Dashboard**: https://supabase.com/dashboard
@@ -39,7 +39,7 @@ Last Updated: December 15, 2025
 ## 🏗️ Project Structure
 
 ```
-crav-market-oracle/
+javari-market-oracle/
 ├── app/                      # Next.js App Router
 │   ├── page.tsx              # Landing page
 │   ├── ai-picks/             # Dashboard

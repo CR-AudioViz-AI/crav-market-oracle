@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { getCredits, getSubscription, getCurrentUser, type CRAIverseCredits, type CRAIverseSubscription } from './index';
+import { getCredits, getSubscription, getCurrentUser, type JavariverseCredits, type JavariverseSubscription } from './index';
 
 // =====================================================
 // CREDIT BAR COMPONENT
@@ -19,8 +19,8 @@ export function CreditBar({
   showSubscription = true,
   onBuyCredits 
 }: CreditBarProps) {
-  const [credits, setCredits] = useState<CRAIverseCredits | null>(null);
-  const [subscription, setSubscription] = useState<CRAIverseSubscription | null>(null);
+  const [credits, setCredits] = useState<JavariverseCredits | null>(null);
+  const [subscription, setSubscription] = useState<JavariverseSubscription | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
@@ -259,7 +259,7 @@ export function AuthGate({
   requireCredits 
 }: AuthGateProps) {
   const [user, setUser] = useState<any>(null);
-  const [credits, setCredits] = useState<CRAIverseCredits | null>(null);
+  const [credits, setCredits] = useState<JavariverseCredits | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -382,10 +382,10 @@ export function AuthGate({
 /**
  * Hook to get current user and credits
  */
-export function useCRAIverse() {
+export function useJavariverse() {
   const [user, setUser] = useState<any>(null);
-  const [credits, setCredits] = useState<CRAIverseCredits | null>(null);
-  const [subscription, setSubscription] = useState<CRAIverseSubscription | null>(null);
+  const [credits, setCredits] = useState<JavariverseCredits | null>(null);
+  const [subscription, setSubscription] = useState<JavariverseSubscription | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -403,7 +403,7 @@ export function useCRAIverse() {
           setSubscription(subData);
         }
       } catch (error) {
-        console.error('useCRAIverse error:', error);
+        console.error('useJavariverse error:', error);
       } finally {
         setLoading(false);
       }
@@ -433,5 +433,5 @@ export function useCRAIverse() {
 export default {
   CreditBar,
   AuthGate,
-  useCRAIverse,
+  useJavariverse,
 };

@@ -163,11 +163,11 @@ export default function HelpPage() {
               <p className="text-sm text-slate-400">Design, audio, video, business tools</p>
             </a>
             <a 
-              href="https://craudiovizai.com/craiverse"
+              href="https://craudiovizai.com/javariverse"
               target="_blank"
               className="bg-slate-800 hover:bg-slate-700 rounded-lg p-4 transition-colors border border-slate-700"
             >
-              <p className="font-bold text-white mb-1">CRAIverse</p>
+              <p className="font-bold text-white mb-1">Javariverse</p>
               <p className="text-sm text-slate-400">Virtual world with 20 social impact modules</p>
             </a>
           </div>

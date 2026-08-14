@@ -20,13 +20,13 @@ Market Oracle AI is part of the **CR AudioViz AI** ecosystem. This document outl
 |---------|-------------|----------------------|
 | **Market Oracle AI** | Multi-AI stock analysis | Core product |
 | **Javari AI** | Universal AI assistant | Powers consensus engine |
-| **CRAIverse** | Virtual world platform | In-app trading zones |
+| **Javariverse** | Virtual world platform | In-app trading zones |
 | **60+ Creative Tools** | Design, audio, video | Report generation |
 
 ### Planned Integrations
 
 1. **Javari AI Chat** - Ask about stocks in natural language
-2. **CRAIverse Trading Floor** - Virtual stock trading
+2. **Javariverse Trading Floor** - Virtual stock trading
 3. **Newsletter Generator** - AI-powered market newsletters
 4. **Portfolio Tracker** - Track picks and performance
 
@@ -41,7 +41,7 @@ Market Oracle AI is part of the **CR AudioViz AI** ecosystem. This document outl
 <section class="market-oracle-promo">
   <h2>AI-Powered Stock Analysis</h2>
   <p>4 AI models. 1 consensus. Make smarter trades.</p>
-  <a href="https://crav-market-oracle.vercel.app">Try Market Oracle →</a>
+  <a href="https://craudiovizai.com/apps/market-oracle">Try Market Oracle →</a>
 </section>
 ```
 
@@ -76,7 +76,7 @@ Every tool in the ecosystem should have:
 
 ```html
 <iframe 
-  src="https://crav-market-oracle.vercel.app/embed/pick?symbol=AAPL"
+  src="https://craudiovizai.com/apps/market-oracle/embed/pick?symbol=AAPL"
   width="400" 
   height="300"
   frameborder="0"
@@ -87,7 +87,7 @@ Every tool in the ecosystem should have:
 
 ```html
 <img 
-  src="https://crav-market-oracle.vercel.app/api/badge?symbol=AAPL"
+  src="https://craudiovizai.com/apps/market-oracle/api/badge?symbol=AAPL"
   alt="AAPL Javari Consensus"
 />
 ```
@@ -223,7 +223,7 @@ For trading platforms and newsletters:
 Always use UTM parameters for cross-marketing:
 
 ```
-https://crav-market-oracle.vercel.app?
+https://craudiovizai.com/apps/market-oracle?
   utm_source=craudiovizai
   &utm_medium=website
   &utm_campaign=homepage_cta

@@ -1,5 +1,5 @@
 // =====================================================
-// CRAIVERSE SDK
+// JAVARIVERSE SDK
 // Shared library for all CR AudioViz AI applications
 // Version: 1.0.0
 // =====================================================
@@ -16,7 +16,7 @@ function getSupabase() {
 // CONFIGURATION
 // =====================================================
 
-const CRAIVERSE_CONFIG = {
+const JAVARIVERSE_CONFIG = {
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://kteobfyferrukqeolofj.supabase.co',
   supabaseAnonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
   appSlug: process.env.NEXT_PUBLIC_APP_SLUG || 'unknown',
@@ -33,7 +33,7 @@ const CRAIVERSE_CONFIG = {
   created_at: string;
 }
 
-export interface CRAIverseCredits {
+export interface JavariverseCredits {
   id: string;
   user_id?: string;
   org_id?: string;
@@ -44,7 +44,7 @@ export interface CRAIverseCredits {
   bonus_expires_at?: string;
 }
 
-export interface CRAIverseSubscription {
+export interface JavariverseSubscription {
   id: string;
   plan_id: string;
   plan_name: string;
@@ -68,13 +68,13 @@ export interface DeductCreditsResult {
 /**
  * Get the current authenticated user's profile
  */
-export async function getCurrentUser(): Promise<CRAIverseUser | null> {
+export async function getCurrentUser(): Promise<JavariverseUser | null> {
   try {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return null;
 
     const { data: profile } = await supabase
-      .from('craiverse_profiles')
+      .from('javariverse_profiles')
       .select('*')
       .eq('auth_user_id', user.id)
       .single();
@@ -115,7 +115,7 @@ export async function signUp(email: string, password: string, displayName?: stri
   
   // Create profile record
   if (data.user) {
-    await supabase.from('craiverse_profiles').insert({
+    await supabase.from('javariverse_profiles').insert({
       auth_user_id: data.user.id,
       email: email,
       display_name: displayName,
@@ -123,25 +123,25 @@ export async function signUp(email: string, password: string, displayName?: stri
     
     // Give new user 50 free credits
     const { data: profile } = await supabase
-      .from('craiverse_profiles')
+      .from('javariverse_profiles')
       .select('id')
       .eq('auth_user_id', data.user.id)
       .single();
       
     if (profile) {
-      await supabase.from('craiverse_credits').insert({
+      await supabase.from('javariverse_credits').insert({
         user_id: profile.id,
         balance: 50,
         lifetime_earned: 50,
       });
       
       // Log the transaction
-      await supabase.from('craiverse_credit_transactions').insert({
+      await supabase.from('javariverse_credit_transactions').insert({
         user_id: profile.id,
         amount: 50,
         balance_after: 50,
         type: 'bonus',
-        source_app: CRAIVERSE_CONFIG.appSlug,
+        source_app: JAVARIVERSE_CONFIG.appSlug,
         source_action: 'signup_bonus',
       });
     }
@@ -173,9 +173,9 @@ export async function getSession() {
 /**
  * Get user's current credit balance
  */
-export async function getCredits(userId: string): Promise<CRAIverseCredits | null> {
+export async function getCredits(userId: string): Promise<JavariverseCredits | null> {
   const { data } = await supabase
-    .from('craiverse_credits')
+    .from('javariverse_credits')
     .select('*')
     .eq('user_id', userId)
     .single();
@@ -196,7 +196,7 @@ export async function deductCredits(
   try {
     // Get current balance
     const { data: credits } = await supabase
-      .from('craiverse_credits')
+      .from('javariverse_credits')
       .select('*')
       .eq('user_id', userId)
       .single();
@@ -233,7 +233,7 @@ export async function deductCredits(
     
     // Update balance
     const { error: updateError } = await supabase
-      .from('craiverse_credits')
+      .from('javariverse_credits')
       .update({
         balance: newBalance,
         bonus_balance: newBonusBalance,
@@ -245,12 +245,12 @@ export async function deductCredits(
     if (updateError) throw updateError;
     
     // Log transaction
-    await supabase.from('craiverse_credit_transactions').insert({
+    await supabase.from('javariverse_credit_transactions').insert({
       user_id: userId,
       amount: -amount,
       balance_after: newBalance,
       type: 'spend',
-      source_app: CRAIVERSE_CONFIG.appSlug,
+      source_app: JAVARIVERSE_CONFIG.appSlug,
       source_action: action,
       source_reference: reference,
     });
@@ -289,25 +289,25 @@ export async function addCredits(
 ): Promise<{ success: boolean; new_balance: number; error?: string }> {
   try {
     const { data: credits } = await supabase
-      .from('craiverse_credits')
+      .from('javariverse_credits')
       .select('*')
       .eq('user_id', userId)
       .single();
       
     if (!credits) {
       // Create credits record if doesn't exist
-      await supabase.from('craiverse_credits').insert({
+      await supabase.from('javariverse_credits').insert({
         user_id: userId,
         balance: amount,
         lifetime_earned: amount,
       });
       
-      await supabase.from('craiverse_credit_transactions').insert({
+      await supabase.from('javariverse_credit_transactions').insert({
         user_id: userId,
         amount: amount,
         balance_after: amount,
         type,
-        source_app: CRAIVERSE_CONFIG.appSlug,
+        source_app: JAVARIVERSE_CONFIG.appSlug,
         source_reference: reference,
       });
       
@@ -317,7 +317,7 @@ export async function addCredits(
     const newBalance = credits.balance + amount;
     
     await supabase
-      .from('craiverse_credits')
+      .from('javariverse_credits')
       .update({
         balance: newBalance,
         lifetime_earned: credits.lifetime_earned + amount,
@@ -325,12 +325,12 @@ export async function addCredits(
       })
       .eq('user_id', userId);
       
-    await supabase.from('craiverse_credit_transactions').insert({
+    await supabase.from('javariverse_credit_transactions').insert({
       user_id: userId,
       amount: amount,
       balance_after: newBalance,
       type,
-      source_app: CRAIVERSE_CONFIG.appSlug,
+      source_app: JAVARIVERSE_CONFIG.appSlug,
       source_reference: reference,
     });
     
@@ -348,12 +348,12 @@ export async function addCredits(
 /**
  * Get user's active subscription
  */
-export async function getSubscription(userId: string): Promise<CRAIverseSubscription | null> {
+export async function getSubscription(userId: string): Promise<JavariverseSubscription | null> {
   const { data } = await supabase
-    .from('craiverse_subscriptions')
+    .from('javariverse_subscriptions')
     .select(`
       *,
-      plan:craiverse_subscription_plans(name, credits_monthly)
+      plan:javariverse_subscription_plans(name, credits_monthly)
     `)
     .eq('user_id', userId)
     .eq('status', 'active')
@@ -383,14 +383,14 @@ export async function createTicket(
   priority: 'low' | 'medium' | 'high' | 'urgent' = 'medium'
 ) {
   const { data, error } = await supabase
-    .from('craiverse_tickets')
+    .from('javariverse_tickets')
     .insert({
       user_id: userId,
       subject,
       description,
       category,
       priority,
-      source_app: CRAIVERSE_CONFIG.appSlug,
+      source_app: JAVARIVERSE_CONFIG.appSlug,
       source_url: typeof window !== 'undefined' ? window.location.href : '',
     })
     .select()
@@ -405,7 +405,7 @@ export async function createTicket(
  */
 export async function getTickets(userId: string, status?: string) {
   let query = supabase
-    .from('craiverse_tickets')
+    .from('javariverse_tickets')
     .select('*')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
@@ -430,10 +430,10 @@ export async function logActivity(
   action: string,
   metadata?: Record<string, any>
 ) {
-  await supabase.from('craiverse_activity_log').insert({
+  await supabase.from('javariverse_activity_log').insert({
     user_id: userId,
     action,
-    source_app: CRAIVERSE_CONFIG.appSlug,
+    source_app: JAVARIVERSE_CONFIG.appSlug,
     metadata,
   });
 }
@@ -453,13 +453,13 @@ export async function trackUsage(
 ) {
   // Get app ID
   const { data: app } = await supabase
-    .from('craiverse_apps')
+    .from('javariverse_apps')
     .select('id')
-    .eq('slug', CRAIVERSE_CONFIG.appSlug)
+    .eq('slug', JAVARIVERSE_CONFIG.appSlug)
     .single();
     
   if (app) {
-    await supabase.from('craiverse_app_usage').insert({
+    await supabase.from('javariverse_app_usage').insert({
       app_id: app.id,
       user_id: userId,
       action,
@@ -483,13 +483,13 @@ export async function submitEnhancement(
   category: 'feature' | 'improvement' | 'integration' | 'ui_ux' | 'performance' | 'other'
 ) {
   const { data, error } = await supabase
-    .from('craiverse_enhancements')
+    .from('javariverse_enhancements')
     .insert({
       author_id: userId,
       title,
       description,
       category,
-      target_app: CRAIVERSE_CONFIG.appSlug,
+      target_app: JAVARIVERSE_CONFIG.appSlug,
     })
     .select()
     .single();
@@ -508,7 +508,7 @@ export async function voteEnhancement(
 ) {
   // Upsert vote
   await supabase
-    .from('craiverse_enhancement_votes')
+    .from('javariverse_enhancement_votes')
     .upsert({
       enhancement_id: enhancementId,
       user_id: userId,
@@ -519,14 +519,14 @@ export async function voteEnhancement(
     
   // Update vote count
   const { data: votes } = await supabase
-    .from('craiverse_enhancement_votes')
+    .from('javariverse_enhancement_votes')
     .select('vote')
     .eq('enhancement_id', enhancementId);
     
   const voteCount = votes?.reduce((sum, v) => sum + v.vote, 0) || 0;
   
   await supabase
-    .from('craiverse_enhancements')
+    .from('javariverse_enhancements')
     .update({ vote_count: voteCount })
     .eq('id', enhancementId);
 }
@@ -543,7 +543,7 @@ export async function generateReferralCode(userId: string): Promise<string> {
   
   // Store in user preferences
   await supabase
-    .from('craiverse_profiles')
+    .from('javariverse_profiles')
     .update({
       preferences: { referral_code: code },
     })
@@ -558,7 +558,7 @@ export async function generateReferralCode(userId: string): Promise<string> {
 export async function applyReferralCode(userId: string, code: string) {
   // Find referrer
   const { data: referrer } = await supabase
-    .from('craiverse_profiles')
+    .from('javariverse_profiles')
     .select('id')
     .contains('preferences', { referral_code: code })
     .single();
@@ -569,7 +569,7 @@ export async function applyReferralCode(userId: string, code: string) {
   
   // Check if already referred
   const { data: existing } = await supabase
-    .from('craiverse_referrals')
+    .from('javariverse_referrals')
     .select('id')
     .eq('referred_id', userId)
     .single();
@@ -579,7 +579,7 @@ export async function applyReferralCode(userId: string, code: string) {
   }
   
   // Create referral record
-  await supabase.from('craiverse_referrals').insert({
+  await supabase.from('javariverse_referrals').insert({
     referrer_id: referrer.id,
     referred_id: userId,
     referral_code: code,

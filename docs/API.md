@@ -1,7 +1,7 @@
 # Market Oracle AI - API Documentation
 
 **Version:** 1.0  
-**Base URL:** `https://crav-market-oracle.vercel.app`  
+**Base URL:** `https://craudiovizai.com/apps/market-oracle`  
 **Last Updated:** December 14, 2025
 
 ---
@@ -306,4 +306,4 @@ console.log(analysis.consensus.direction);
 ## Support
 
 - Email: support@craudiovizai.com
-- Documentation: https://crav-market-oracle.vercel.app/docs
+- Documentation: https://craudiovizai.com/apps/market-oracle/docs

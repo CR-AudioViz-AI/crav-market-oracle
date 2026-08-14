@@ -12,7 +12,7 @@ interface Course {
   id: string
   title: string
   description: string
-  provider: 'crav' | 'affiliate'
+  provider: 'javari' | 'affiliate'
   affiliatePartner?: string
   affiliateCommission?: number
   level: 'beginner' | 'intermediate' | 'advanced' | 'expert'
@@ -44,8 +44,8 @@ const COURSES: Record<string, Course[]> = {
   'market-oracle': [
     {
       id: 'mo-1', title: 'AI-Powered Trading Fundamentals', description: 'Learn to leverage AI for smarter investment decisions',
-      provider: 'crav', level: 'beginner', duration: '4 hours', lessons: 12, enrolled: 2450, rating: 4.8,
-      price: 49, originalPrice: 99, certification: true, certificationValue: 'CRAV AI Trader Level 1',
+      provider: 'javari', level: 'beginner', duration: '4 hours', lessons: 12, enrolled: 2450, rating: 4.8,
+      price: 49, originalPrice: 99, certification: true, certificationValue: 'javari AI Trader Level 1',
       progress: 65, tags: ['AI', 'Trading', 'Stocks'], thumbnail: '📈'
     },
     {
@@ -72,8 +72,8 @@ const COURSES: Record<string, Course[]> = {
   'logo-studio': [
     {
       id: 'ls-1', title: 'Logo Design Fundamentals', description: 'Create memorable logos from scratch',
-      provider: 'crav', level: 'beginner', duration: '3 hours', lessons: 10, enrolled: 1850, rating: 4.7,
-      price: 29, originalPrice: 59, certification: true, certificationValue: 'CRAV Logo Designer',
+      provider: 'javari', level: 'beginner', duration: '3 hours', lessons: 10, enrolled: 1850, rating: 4.7,
+      price: 29, originalPrice: 59, certification: true, certificationValue: 'javari Logo Designer',
       progress: 100, tags: ['Design', 'Branding', 'Logo'], thumbnail: '🎨'
     },
     {
@@ -93,8 +93,8 @@ const COURSES: Record<string, Course[]> = {
   'social-graphics': [
     {
       id: 'sg-1', title: 'Social Media Design Basics', description: 'Create scroll-stopping content',
-      provider: 'crav', level: 'beginner', duration: '2 hours', lessons: 8, enrolled: 3200, rating: 4.6,
-      price: 19, certification: true, certificationValue: 'CRAV Social Designer',
+      provider: 'javari', level: 'beginner', duration: '2 hours', lessons: 8, enrolled: 3200, rating: 4.6,
+      price: 19, certification: true, certificationValue: 'javari Social Designer',
       tags: ['Social', 'Graphics', 'Content'], thumbnail: '📱'
     },
     {
@@ -115,8 +115,8 @@ const COURSES: Record<string, Course[]> = {
   'invoice-generator': [
     {
       id: 'ig-1', title: 'Freelance Business Basics', description: 'Run your freelance business like a pro',
-      provider: 'crav', level: 'beginner', duration: '3 hours', lessons: 12, enrolled: 1500, rating: 4.8,
-      price: 39, certification: true, certificationValue: 'CRAV Business Pro',
+      provider: 'javari', level: 'beginner', duration: '3 hours', lessons: 12, enrolled: 1500, rating: 4.8,
+      price: 39, certification: true, certificationValue: 'javari Business Pro',
       tags: ['Freelance', 'Business', 'Finance'], thumbnail: '💼'
     },
     {
@@ -136,8 +136,8 @@ const COURSES: Record<string, Course[]> = {
 }
 
 const USER_CERTIFICATIONS: Certification[] = [
-  { id: 'c1', name: 'CRAV AI Trader Level 1', issuer: 'CR AudioViz AI', earnedDate: '2024-12-15', credentialId: 'CRAV-2024-12345', skills: ['AI Trading', 'Market Analysis'], verified: true },
-  { id: 'c2', name: 'CRAV Logo Designer', issuer: 'CR AudioViz AI', earnedDate: '2024-11-20', credentialId: 'CRAV-2024-11234', skills: ['Logo Design', 'Branding'], verified: true },
+  { id: 'c1', name: 'javari AI Trader Level 1', issuer: 'CR AudioViz AI', earnedDate: '2024-12-15', credentialId: 'javari-2024-12345', skills: ['AI Trading', 'Market Analysis'], verified: true },
+  { id: 'c2', name: 'javari Logo Designer', issuer: 'CR AudioViz AI', earnedDate: '2024-11-20', credentialId: 'javari-2024-11234', skills: ['Logo Design', 'Branding'], verified: true },
 ]
 
 interface TrainingCertificationHubProps {
