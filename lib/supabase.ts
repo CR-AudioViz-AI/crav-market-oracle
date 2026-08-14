@@ -1,10 +1,15 @@
 // lib/supabase.ts — CR AudioViz AI Platform Standard  May 16 2026
+// Updated: 2026-08-14 — fix missing _supabase declaration (TDZ crash);
+//                        add getPicks/getAIModels/getAIStatistics/getHotPicks/
+//                        getOverallStats/getRecentWinners/AssetType exports
 import { createClient as _create, SupabaseClient } from "@supabase/supabase-js"
 
 function getUrl() { return process.env.NEXT_PUBLIC_SUPABASE_URL! }
 function getAnon() { return process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY! }
 function getSvc() { return process.env.SUPABASE_SERVICE_ROLE_KEY ?? getAnon() }
 
+// ⚠️ _supabase MUST be declared before getSupabase() — TDZ guard
+let _supabase: SupabaseClient | null = null
 let _supabaseAdmin: SupabaseClient | null = null
 
 export function getSupabase(): SupabaseClient {
@@ -62,3 +67,173 @@ export function createSupabaseServerClient(): SupabaseClient {
   return _create(getUrl(), getSvc(), { auth: { persistSession: false } })
 }
 export { getUrl as SUPABASE_URL_FN }
+
+// ============================================================================
+// QUERY HELPERS — used by dashboard-data and other API routes
+// ============================================================================
+
+export type AssetType = 'stock' | 'penny_stock' | 'crypto'
+
+export interface Pick {
+  id: string
+  ai_model_id: string
+  ticker: string
+  symbol: string
+  company_name: string
+  category: string
+  asset_type: AssetType
+  direction: 'UP' | 'DOWN'
+  confidence: number
+  entry_price: number
+  current_price: number
+  target_price: number
+  stop_loss: number
+  price_change_percent: number
+  price_change_dollars: number
+  reasoning: string
+  reasoning_summary: string
+  key_factors: string[]
+  risk_factors: string[]
+  status: 'active' | 'closed'
+  result?: 'win' | 'loss'
+  profit_loss_percent?: number
+  points_earned?: number
+  week_number: number
+  pick_date: string
+  expiry_date: string
+  price_updated_at: string
+  closed_at?: string
+}
+
+export interface AIModel {
+  id: string
+  name: string
+  provider: string
+  model: string
+  total_picks: number
+  total_wins: number
+  total_losses: number
+  win_rate: number
+  total_profit_loss: number
+  current_streak: number
+  best_win_streak: number
+  worst_loss_streak: number
+  updated_at: string
+}
+
+export interface AIStatistics {
+  totalPicks: number
+  activePicks: number
+  closedPicks: number
+  wins: number
+  losses: number
+  winRate: number
+  avgConfidence: number
+  avgProfitLoss: number
+}
+
+export interface OverallStats {
+  totalPicks: number
+  totalWins: number
+  totalLosses: number
+  overallWinRate: number
+  totalModels: number
+  activeModels: number
+}
+
+export async function getPicks(opts: {
+  assetType?: AssetType
+  status?: 'active' | 'closed'
+  limit?: number
+} = {}): Promise<Pick[]> {
+  const sb = getSupabaseAdmin()
+  let q = sb.from('stock_picks').select('*').order('pick_date', { ascending: false })
+  if (opts.assetType) q = q.eq('asset_type', opts.assetType)
+  if (opts.status) q = q.eq('status', opts.status)
+  if (opts.limit) q = q.limit(opts.limit)
+  const { data, error } = await q
+  if (error) throw error
+  return (data ?? []) as Pick[]
+}
+
+export async function getAIModels(): Promise<AIModel[]> {
+  const sb = getSupabaseAdmin()
+  const { data, error } = await sb
+    .from('ai_models')
+    .select('*')
+    .order('win_rate', { ascending: false })
+  if (error) throw error
+  return (data ?? []) as AIModel[]
+}
+
+export async function getAIStatistics(assetType?: AssetType): Promise<AIStatistics> {
+  const picks = await getPicks({ assetType, limit: 2000 })
+  const closed = picks.filter(p => p.status === 'closed')
+  const wins = closed.filter(p => p.result === 'win')
+  const losses = closed.filter(p => p.result === 'loss')
+  const avgConf = picks.length
+    ? picks.reduce((s, p) => s + p.confidence, 0) / picks.length
+    : 0
+  const avgPL = closed.length
+    ? closed.reduce((s, p) => s + (p.profit_loss_percent ?? 0), 0) / closed.length
+    : 0
+  return {
+    totalPicks: picks.length,
+    activePicks: picks.filter(p => p.status === 'active').length,
+    closedPicks: closed.length,
+    wins: wins.length,
+    losses: losses.length,
+    winRate: closed.length ? (wins.length / closed.length) * 100 : 0,
+    avgConfidence: parseFloat(avgConf.toFixed(1)),
+    avgProfitLoss: parseFloat(avgPL.toFixed(2)),
+  }
+}
+
+export async function getHotPicks(limit = 10, assetType?: AssetType): Promise<Pick[]> {
+  const sb = getSupabaseAdmin()
+  let q = sb
+    .from('stock_picks')
+    .select('*')
+    .eq('status', 'active')
+    .order('confidence', { ascending: false })
+    .limit(limit)
+  if (assetType) q = q.eq('asset_type', assetType)
+  const { data, error } = await q
+  if (error) throw error
+  return (data ?? []) as Pick[]
+}
+
+export async function getOverallStats(): Promise<OverallStats> {
+  const sb = getSupabaseAdmin()
+  const [{ data: picks }, { data: models }] = await Promise.all([
+    sb.from('stock_picks').select('status, result'),
+    sb.from('ai_models').select('id, total_picks'),
+  ])
+  const allPicks = picks ?? []
+  const closed = allPicks.filter((p: { status: string }) => p.status === 'closed')
+  const wins = closed.filter((p: { result: string }) => p.result === 'win')
+  const allModels = models ?? []
+  return {
+    totalPicks: allPicks.length,
+    totalWins: wins.length,
+    totalLosses: closed.length - wins.length,
+    overallWinRate: closed.length ? parseFloat(((wins.length / closed.length) * 100).toFixed(1)) : 0,
+    totalModels: allModels.length,
+    activeModels: allModels.filter((m: { total_picks: number }) => m.total_picks > 0).length,
+  }
+}
+
+export async function getRecentWinners(limit = 5, assetType?: AssetType): Promise<Pick[]> {
+  const sb = getSupabaseAdmin()
+  let q = sb
+    .from('stock_picks')
+    .select('*')
+    .eq('status', 'closed')
+    .eq('result', 'win')
+    .order('closed_at', { ascending: false })
+    .limit(limit)
+  if (assetType) q = q.eq('asset_type', assetType)
+  const { data, error } = await q
+  if (error) throw error
+  return (data ?? []) as Pick[]
+}

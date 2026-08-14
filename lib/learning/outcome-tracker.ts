@@ -8,12 +8,15 @@ import { createClient } from '@supabase/supabase-js';
 import type { AIModelName, PickDirection, PickOutcome } from '../types/learning';
 
 // Lazy Supabase client — initialized on first request (not at module load time)
+// ⚠️ _supabase MUST be declared before getSupabase() — TDZ guard
+let _supabase: ReturnType<typeof createClient> | null = null;
 function getSupabase() {
   if (!_supabase) {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://kteobfyferrukqeolofj.supabase.co";
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt0ZW9iZnlmZXJydWtxZW9sb2ZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk1NzUwNjUsImV4cCI6MjA1NTE1MTA2NX0.r3_3bXtqo6VCJqYHijtxdEpXkWyNVGKd67kNQvqkrD4";
     _supabase = createClient(url, key);
   }
+  return _supabase;
 }
 interface PickRecord {
   id: string;
@@ -114,9 +117,10 @@ async function recordFactorOutcomes(
     console.log('No factor assessments to record for pick', pick.id);
     return;
   }
-  
+
   console.log(`Recording ${pick.factor_assessments.length} factor outcomes for pick ${pick.id}`);
-  
+
+  const supabase = getSupabase();
   // Use correct column names matching the table schema
   const factorRecords = pick.factor_assessments.map(factor => ({
     pick_id: pick.id,
@@ -130,7 +134,7 @@ async function recordFactorOutcomes(
     sector: pick.sector || 'Unknown',
     created_at: new Date().toISOString(),
   }));
-  
+
   const { data, error } = await supabase
     .from('market_oracle_factor_outcomes')
     .insert(factorRecords)
@@ -148,6 +152,7 @@ async function updateConsensusStats(
   pick: PickRecord,
   outcome: PickOutcome
 ): Promise<void> {
+  const supabase = getSupabase();
   // Find consensus records that include this pick's symbol
   const { data: consensusRecords } = await supabase
     .from('market_oracle_consensus_picks')
