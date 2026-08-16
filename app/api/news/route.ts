@@ -8,11 +8,11 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 // API Keys from credentials
-const NEWS_API_KEY = process.env.NEWSAPI_API_KEY || '29a98d7494b74400b8423f0d1143e8ff';
+const NEWS_API_KEY = process.env.NEWSAPI_API_KEY || (process.env.NEWSAPI_KEY ?? '');
 const NEWSDATA_API_KEY = process.env.NEWSDATA_API_KEY || 'pub_7b15a6d1ccd243389a774daaf72b64b4';
 const CURRENTS_API_KEY = process.env.CURRENTS_API_KEY || 'mYKRTO6yENe9IwvKYxdeh9vecgj6M_HWwpi0d3z2UvbsZwZd';
 const THENEWS_API_KEY = process.env.THENEWS_API_KEY || 'NLC29DIjhVm3WM7dIPXWIGmnlKLd65JtpKKdWvTI';
-const GNEWS_API_KEY = process.env.GNEWS_API_KEY || 'bdcf37e0b6b8ad8fc5cb1bdd0cd8ff88';
+const GNEWS_API_KEY = process.env.GNEWS_API_KEY || (process.env.GNEWS_API_KEY ?? '');
 
 interface NewsArticle {
   id: string;

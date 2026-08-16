@@ -7,8 +7,8 @@ import { NextResponse } from 'next/server';
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY || 'd50o3i9r01qm94qn6ag0d50o3i9r01qm94qn6agg';
-const FMP_API_KEY = process.env.FMP_API_KEY || 'tkfzWoW3wJIAHRRlMRXgqzrFcEspDVts';
+const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY || (process.env.FINNHUB_API_KEY ?? '');
+const FMP_API_KEY = process.env.FMP_API_KEY || (process.env.FMP_API_KEY ?? '');
 
 interface EarningsEvent {
   id: string;

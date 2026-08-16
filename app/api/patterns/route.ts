@@ -7,8 +7,8 @@ import { NextResponse } from 'next/server';
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-const TWELVE_DATA_KEY = process.env.TWELVE_DATA_API_KEY || '820e92da2fe34f3b8347b3faea0dade8';
-const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY || 'd50o3i9r01qm94qn6ag0d50o3i9r01qm94qn6agg';
+const TWELVE_DATA_KEY = process.env.TWELVE_DATA_API_KEY || (process.env.TWELVE_DATA_API_KEY ?? '');
+const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY || (process.env.FINNHUB_API_KEY ?? '');
 
 interface PatternResult {
   pattern: string;
