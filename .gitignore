@@ -57,3 +57,10 @@ serviceAccountKey.json
 tmp/
 temp/
 *.tmp
+
+# 2026-08-16: .env.production in this repo held the Supabase SERVICE ROLE KEY in
+# a PUBLIC repository. That key bypasses every RLS policy on 822 tables. Env
+# files are never committed — values come from Vercel or the vault.
+.env
+.env.*
+!.env.example
