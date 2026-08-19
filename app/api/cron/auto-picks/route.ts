@@ -13,12 +13,19 @@ const OR = process.env.OPENROUTER_API_KEY || ''
 // ⚠️ _supabase MUST be declared before getSupabase() — TDZ guard
 let _supabase: ReturnType<typeof createClient> | null = null;
 function getSupabase() {
-  const { createClient   return _supabase;
-} = require('@supabase/supabase-js')
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY!
-  if (!url || !key) return null
-  return createClient(url, key, { auth: { persistSession: false } })
+  // 2026-08-19: `return _supabase;` had been spliced INTO the destructuring
+  // pattern - `const { createClient   return _supabase;\n} = require(...)`.
+  // Same corruption as 27 sibling files, landing at a different point.
+  if (_supabase) return _supabase;
+  const { createClient } = require('@supabase/supabase-js');
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+  if (!url || !key) return null;
+  _supabase = createClient(url, key, {
+    auth: { persistSession: false },
+    global: { fetch: (u: RequestInfo | URL, o?: RequestInit) => fetch(u, { ...o, cache: 'no-store' }) },
+  });
+  return _supabase;
 }
 
 const WATCH_UNIVERSE = [

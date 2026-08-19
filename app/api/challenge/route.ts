@@ -7,16 +7,33 @@ import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
 
-// Lazy Supabase client — initialized on first request (not at module load time)
-// ⚠️ _supabase MUST be declared before getSupabase() — TDZ guard
+// Lazy Supabase client — built on first request, never at module load, so a
+// missing env var cannot break the build.
+//
+// 2026-08-19: this function was CORRUPTED. `return _supabase;` had been spliced
+// into the middle of the options object literal:
+//
+//   return sb.createClient(url, key, { auth: { persistSession: false   return _supabase;
+//   } })
+//
+// The result parsed but the route threw "supabase is not defined" on every call,
+// so the 90-day challenge has been dead since whatever edit produced it. Found by
+// probing 140 live endpoints on 2026-08-19, not by reading code.
+//
+// Rewritten to cache properly, which is what the _supabase variable was always for.
 let _supabase: ReturnType<typeof createClient> | null = null;
-function getSupabase() {
-  var sb = require('@supabase/supabase-js')
-  var url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  var key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  if (!url || !key) return null
-  return sb.createClient(url, key, { auth: { persistSession: false   return _supabase;
-} })
+function getSupabase(): ReturnType<typeof createClient> | null {
+  if (_supabase) return _supabase;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  _supabase = createClient(url, key, {
+    auth: { persistSession: false },
+    // Bypass the Next.js Data Cache: it caches PostgREST GETs by URL and serves
+    // stale rows, invisibly - x-vercel-cache reports MISS throughout.
+    global: { fetch: (u, o) => fetch(u, { ...o, cache: 'no-store' }) },
+  });
+  return _supabase;
 }
 // Challenge Configuration
 const CHALLENGE_CONFIG = {

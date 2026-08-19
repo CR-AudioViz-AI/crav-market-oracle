@@ -7,12 +7,29 @@
 // ⚠️ _supabase MUST be declared before getSupabase() — TDZ guard
 let _supabase: ReturnType<typeof createClient> | null = null;
 function getSupabase() {
-  var sb = require('@supabase/supabase-js')
-  var url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  var key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  if (!url || !key) return null
-  return sb.createClient(url, key, { auth: { persistSession: false   return _supabase;
-} })
+  // 2026-08-19: this function was CORRUPTED in 27 files, byte-identically.
+  // `return _supabase;` had been spliced into the middle of the options object:
+  //
+  //   return sb.createClient(url, key, { auth: { persistSession: false   return _supabase;
+  //   } })
+  //
+  // The repo did not compile - 102 type errors across 29 files - and every route
+  // using it threw "supabase is not defined". javarimarket.com kept serving only
+  // because Vercel holds the last successful build; the next push would have
+  // failed and stayed failed.
+  //
+  // Now caches properly, which is what _supabase was always for, and pins
+  // no-store: Next 14 caches PostgREST GETs by URL and serves stale rows.
+  if (_supabase) return _supabase;
+  const sb = require('@supabase/supabase-js');
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  _supabase = sb.createClient(url, key, {
+    auth: { persistSession: false },
+    global: { fetch: (u: RequestInfo | URL, o?: RequestInit) => fetch(u, { ...o, cache: 'no-store' }) },
+  });
+  return _supabase;
 }
 
 // =====================================================
@@ -25,7 +42,13 @@ const JAVARIVERSE_CONFIG = {
   appSlug: process.env.NEXT_PUBLIC_APP_SLUG || 'unknown',
 };
 
-// Create Supabase client
+// 2026-08-19: the declaration line of this interface was destroyed by the same
+// splice that corrupted 27 other files in this repo - the header was replaced
+// with a stray comment, leaving orphaned members and breaking the whole module.
+// JavariverseUser is referenced by getCurrentUser() below, which is how the name
+// was recovered.
+export interface JavariverseUser {
+  id: string;
   email: string;
   display_name?: string;
   avatar_url?: string;

@@ -425,12 +425,16 @@ function getNextFriday(): string {
 // ============================================
 
 export async function updatePricesAndScore(): Promise<{
-  const supabase = getSupabase()!
   updated: number;
   winners: number;
   losers: number;
   errors: string[];
 }> {
+  // 2026-08-19: `const supabase = getSupabase()!` had been spliced INTO the
+  // return type annotation, between Promise<{ and the first property. Same
+  // corruption as 29 sibling files in this repo, landing at a different point
+  // each time. It belongs in the body.
+  const supabase = getSupabase()!;
   const result = { updated: 0, winners: 0, losers: 0, errors: [] as string[] };
   
   // Get active picks
