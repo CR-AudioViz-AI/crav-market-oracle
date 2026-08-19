@@ -96,6 +96,10 @@ export async function POST(req: NextRequest) {
 }
 
 async function updatePrices() {
+  // 2026-08-19: this function used `supabase` without declaring it. The
+  // corruption that hit this repo left only some functions with a client, so
+  // the rest threw "supabase is not defined" at runtime while compiling fine.
+  const supabase = getSupabase()!;
   const startTime = Date.now();
   const apiKey = process.env.TWELVE_DATA_API_KEY;
   

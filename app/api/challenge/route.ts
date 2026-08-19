@@ -127,6 +127,10 @@ export async function POST(request: NextRequest) {
 // ----- CHALLENGE FUNCTIONS -----
 
 async function getChallengeStatus(userId: string | null) {
+  // 2026-08-19: this helper used `supabase` without declaring it - the
+  // corruption that hit this file left only the two route handlers with a
+  // client, so every helper threw "supabase is not defined".
+  const supabase = getSupabase()!;
   // Get active challenge
   const { data: activeChallenge } = await supabase
     .from('challenge_enrollments')
@@ -164,6 +168,10 @@ async function getChallengeStatus(userId: string | null) {
 }
 
 async function enrollInChallenge(userId: string) {
+  // 2026-08-19: this helper used `supabase` without declaring it - the
+  // corruption that hit this file left only the two route handlers with a
+  // client, so every helper threw "supabase is not defined".
+  const supabase = getSupabase()!;
   // Check if user already enrolled in active challenge
   const { data: existing } = await supabase
     .from('challenge_enrollments')
@@ -249,6 +257,10 @@ async function enrollInChallenge(userId: string) {
 }
 
 async function recordTrade(userId: string, challengeId: string, tradeData: any) {
+  // 2026-08-19: this helper used `supabase` without declaring it - the
+  // corruption that hit this file left only the two route handlers with a
+  // client, so every helper threw "supabase is not defined".
+  const supabase = getSupabase()!;
   // Get enrollment
   const { data: enrollment, error: fetchError } = await supabase
     .from('challenge_enrollments')
@@ -314,6 +326,10 @@ async function recordTrade(userId: string, challengeId: string, tradeData: any) 
 }
 
 async function getLeaderboard(challengeId: string | null) {
+  // 2026-08-19: this helper used `supabase` without declaring it - the
+  // corruption that hit this file left only the two route handlers with a
+  // client, so every helper threw "supabase is not defined".
+  const supabase = getSupabase()!;
   let query = supabase
     .from('challenge_enrollments')
     .select(`
@@ -357,6 +373,10 @@ function getPrizeForRank(rank: number) {
 }
 
 async function getMilestones(userId: string | null) {
+  // 2026-08-19: this helper used `supabase` without declaring it - the
+  // corruption that hit this file left only the two route handlers with a
+  // client, so every helper threw "supabase is not defined".
+  const supabase = getSupabase()!;
   if (!userId) {
     return NextResponse.json({ milestones: CHALLENGE_CONFIG.milestones });
   }
@@ -381,6 +401,10 @@ async function getMilestones(userId: string | null) {
 }
 
 async function checkMilestones(userId: string, challengeId: string) {
+  // 2026-08-19: this helper used `supabase` without declaring it - the
+  // corruption that hit this file left only the two route handlers with a
+  // client, so every helper threw "supabase is not defined".
+  const supabase = getSupabase()!;
   const { data: enrollment } = await supabase
     .from('challenge_enrollments')
     .select('*')
@@ -459,6 +483,10 @@ async function checkMilestones(userId: string, challengeId: string) {
 }
 
 async function getChallengeHistory(userId: string | null) {
+  // 2026-08-19: this helper used `supabase` without declaring it - the
+  // corruption that hit this file left only the two route handlers with a
+  // client, so every helper threw "supabase is not defined".
+  const supabase = getSupabase()!;
   if (!userId) {
     return NextResponse.json({ history: [] });
   }
@@ -476,6 +504,10 @@ async function getChallengeHistory(userId: string | null) {
 }
 
 async function completeChallenge(userId: string, challengeId: string) {
+  // 2026-08-19: this helper used `supabase` without declaring it - the
+  // corruption that hit this file left only the two route handlers with a
+  // client, so every helper threw "supabase is not defined".
+  const supabase = getSupabase()!;
   const { data: enrollment } = await supabase
     .from('challenge_enrollments')
     .select('*')

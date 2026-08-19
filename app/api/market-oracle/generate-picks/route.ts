@@ -189,6 +189,10 @@ async function callAIProvider(aiName: string, prompt: string, model: string, pro
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
 
 async function logAICall(aiName: string, category: string, success: boolean, attempts: number, model: string, usedFallback: boolean, errorMessage?: string) {
+  // 2026-08-19: this function used `supabase` without declaring it. The
+  // corruption that hit this repo left only some functions with a client, so
+  // the rest threw "supabase is not defined" at runtime while compiling fine.
+  const supabase = getSupabase()!;
   try { await supabase.from('ai_call_logs').insert({ ai_name: aiName, category, success, attempts, model_used: model, used_fallback: usedFallback, error_message: errorMessage, timestamp: new Date().toISOString() }); } catch (e) {}
 }
 
@@ -206,6 +210,10 @@ export async function POST(req: NextRequest) {
 }
 
 async function generatePicks() {
+  // 2026-08-19: this function used `supabase` without declaring it. The
+  // corruption that hit this repo left only some functions with a client, so
+  // the rest threw "supabase is not defined" at runtime while compiling fine.
+  const supabase = getSupabase()!;
   const start = Date.now();
   console.log('🚀 Starting V5 with REAL PRICES...');
   

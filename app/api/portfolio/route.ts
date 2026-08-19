@@ -144,6 +144,10 @@ export async function GET(request: NextRequest) {
 // ============================================================================
 
 async function getPortfolios(userId: string): Promise<NextResponse> {
+  // 2026-08-19: this function used `supabase` without declaring it. The
+  // corruption that hit this repo left only some functions with a client, so
+  // the rest threw "supabase is not defined" at runtime while compiling fine.
+  const supabase = getSupabase()!;
   const { data: portfolios, error } = await supabase
     .from('portfolios')
     .select('*')
@@ -201,6 +205,10 @@ async function getPortfolios(userId: string): Promise<NextResponse> {
 // ============================================================================
 
 async function getHoldings(userId: string, portfolioId: string | null): Promise<NextResponse> {
+  // 2026-08-19: this function used `supabase` without declaring it. The
+  // corruption that hit this repo left only some functions with a client, so
+  // the rest threw "supabase is not defined" at runtime while compiling fine.
+  const supabase = getSupabase()!;
   let query = supabase
     .from('holdings')
     .select(`
@@ -272,6 +280,10 @@ async function getHoldings(userId: string, portfolioId: string | null): Promise<
 // ============================================================================
 
 async function getTransactions(userId: string, portfolioId: string | null): Promise<NextResponse> {
+  // 2026-08-19: this function used `supabase` without declaring it. The
+  // corruption that hit this repo left only some functions with a client, so
+  // the rest threw "supabase is not defined" at runtime while compiling fine.
+  const supabase = getSupabase()!;
   let query = supabase
     .from('transactions')
     .select(`
@@ -297,6 +309,10 @@ async function getTransactions(userId: string, portfolioId: string | null): Prom
 // ============================================================================
 
 async function getPerformance(userId: string, portfolioId: string | null): Promise<NextResponse> {
+  // 2026-08-19: this function used `supabase` without declaring it. The
+  // corruption that hit this repo left only some functions with a client, so
+  // the rest threw "supabase is not defined" at runtime while compiling fine.
+  const supabase = getSupabase()!;
   // Get historical snapshots
   let query = supabase
     .from('portfolio_snapshots')
@@ -493,6 +509,10 @@ export async function POST(request: NextRequest) {
 // ============================================================================
 
 async function createPortfolio(userId: string, body: any): Promise<NextResponse> {
+  // 2026-08-19: this function used `supabase` without declaring it. The
+  // corruption that hit this repo left only some functions with a client, so
+  // the rest threw "supabase is not defined" at runtime while compiling fine.
+  const supabase = getSupabase()!;
   const { name, description, initial_value, is_default } = body;
 
   if (!name) {
@@ -533,6 +553,10 @@ async function createPortfolio(userId: string, body: any): Promise<NextResponse>
 // ============================================================================
 
 async function addTransaction(userId: string, body: any): Promise<NextResponse> {
+  // 2026-08-19: this function used `supabase` without declaring it. The
+  // corruption that hit this repo left only some functions with a client, so
+  // the rest threw "supabase is not defined" at runtime while compiling fine.
+  const supabase = getSupabase()!;
   const {
     portfolio_id,
     symbol,
@@ -594,6 +618,10 @@ async function updateHoldings(
   shares: number,
   price: number
 ): Promise<void> {
+  // 2026-08-19: this function used `supabase` without declaring it. The
+  // corruption that hit this repo left only some functions with a client, so
+  // the rest threw "supabase is not defined" at runtime while compiling fine.
+  const supabase = getSupabase()!;
   // Get current holding
   const { data: existing } = await supabase
     .from('holdings')
@@ -659,6 +687,10 @@ async function updateHoldings(
 // ============================================================================
 
 async function quickAddHolding(userId: string, body: any): Promise<NextResponse> {
+  // 2026-08-19: this function used `supabase` without declaring it. The
+  // corruption that hit this repo left only some functions with a client, so
+  // the rest threw "supabase is not defined" at runtime while compiling fine.
+  const supabase = getSupabase()!;
   const { portfolio_id, symbol, shares, average_cost } = body;
 
   if (!portfolio_id || !symbol || !shares || !average_cost) {

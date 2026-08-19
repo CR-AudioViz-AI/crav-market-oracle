@@ -91,6 +91,10 @@ function calculatePoints(
 }
 
 export async function POST(request: NextRequest) {
+  // 2026-08-19: this function used `supabase` without declaring it. The
+  // corruption that hit this repo left only some functions with a client, so
+  // the rest threw "supabase is not defined" at runtime while compiling fine.
+  const supabase = getSupabase()!;
   try {
     // Verify cron secret
     const authHeader = request.headers.get('authorization');
