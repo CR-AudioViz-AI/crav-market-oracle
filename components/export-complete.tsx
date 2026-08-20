@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+// 2026-08-20: was the DEPRECATED @supabase/auth-helpers cookie client. Sessions
+// live in localStorage here, so it found nothing. Now the locked singleton.
+import { createClient as createClientComponentClient } from '@/lib/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
