@@ -27,7 +27,7 @@ export function BrandedHeader({ appName, appLogo, quickLinks = [] }: BrandedHead
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<{ name?: string; email?: string } | null>(null);
   const [credits, setCredits] = useState(0);
-  const [plan, setPlan] = useState<'free' | 'pro' | 'business'>('free');
+  const [plan, setPlan] = useState<'free' | 'pro' | 'business' | 'enterprise'>('free');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -37,18 +37,29 @@ export function BrandedHeader({ appName, appLogo, quickLinks = [] }: BrandedHead
   const checkAuthStatus = async () => {
     try {
       const session = await CentralServices.Auth.getSession();
-      if (session.success && session.data?.user) {
+      // 2026-08-21: this read session.data.user, but
+      // CentralServices.Auth.getSession() returns CentralResponse<User | null> -
+      // the user IS session.data. The extra .user was always undefined, so the
+      // header never showed a signed-in visitor as signed in.
+      if (session.success && session.data) {
         setIsLoggedIn(true);
         setUser({
-          name: session.data.user.user_metadata?.full_name,
-          email: session.data.user.email,
+          // The User in lib/central-services carries `name` directly. There is no
+          // user_metadata here - that belongs to Supabase's own User type, which
+          // is a different shape.
+          name: session.data.name,
+          email: session.data.email,
         });
         
         // Fetch credits
         const creditsResult = await CentralServices.Credits.getBalance();
         if (creditsResult.success) {
           setCredits(creditsResult.data?.balance || 0);
-          setPlan(creditsResult.data?.plan || 'free');
+                    // getBalance() returns { balance, tier } - there is no `plan` field, so
+          // this always fell through to 'free' and every account looked free.
+                    // 'enterprise' is a real tier in the User contract; omitting it from the
+          // state type made every enterprise account render as free.
+          setPlan((creditsResult.data?.tier as 'free' | 'pro' | 'business' | 'enterprise') || 'free');
         }
       }
     } catch (error) {
