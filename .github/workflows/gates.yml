@@ -1,0 +1,35 @@
+name: Gates
+
+# 2026-08-23: NO satellite repo ran the defect gates. All 93 read clean today only
+# because I sweep them by hand from a cloned working copy - which means they are
+# clean at the moment of the sweep and unprotected between sweeps.
+#
+# The core platform's gates caught 36 page-level redirects, 13 unchecked provider
+# sends, 80 auto-stubs and a service-role data leak. Every one of those classes
+# can appear here too, and did: javari-realty had 8 blockers, javari-market 7.
+#
+# This runs the SAME scanner as core, vendored per repo so a satellite does not
+# depend on the core checkout. It needs no dependencies - the scanner reads source
+# files directly - so it costs seconds of Actions time, not minutes.
+#
+# CR AudioViz AI, LLC · EIN 39-3646201
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  audits:
+    name: Defect gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Ecosystem defect scan
+        run: node scripts/audit-ecosystem.mjs
