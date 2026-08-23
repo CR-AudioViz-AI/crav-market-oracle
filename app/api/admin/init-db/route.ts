@@ -56,7 +56,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing Supabase configuration' }, { status: 500 });
     }
 
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    // 2026-08-26: called createClient() with NO IMPORT - a plain ReferenceError,
+    // so this route crashed on the first line touching the database. Same class as
+    // the 15 undefined calls found across the core expenses module. The file
+    // already obtains the SDK via require inside getSupabase(); this call site was
+    // missed. Now uses the same runtime import.
+    const { createClient: _mk } = require('@supabase/supabase-js');
+    const supabase = _mk(supabaseUrl, supabaseServiceKey);
 
     const results: { table: string; status: string; error?: string }[] = [];
 

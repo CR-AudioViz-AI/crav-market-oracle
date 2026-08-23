@@ -41,7 +41,13 @@ export async function GET(request: NextRequest) {
   const redirectTo = requestUrl.searchParams.get('redirect_to') || '/';
 
   if (code) {
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // 2026-08-26: called createClient() with NO IMPORT - a plain ReferenceError,
+    // so this route crashed on the first line touching the database. Same class as
+    // the 15 undefined calls found across the core expenses module. The file
+    // already obtains the SDK via require inside getSupabase(); this call site was
+    // missed. Now uses the same runtime import.
+    const { createClient: _mk } = require('@supabase/supabase-js');
+    const supabase = _mk(SUPABASE_URL, SUPABASE_ANON_KEY);
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (error) {
       console.error('Auth callback error:', error);
