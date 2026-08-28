@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabase, getPicks, getAIModels, getOverallStats } from "@/lib/supabase";
+import { publishableKey, supabaseUrl } from "@craudioviz/platform-sdk";
 
 export const dynamic = "force-dynamic";
 
@@ -7,9 +8,9 @@ export async function GET() {
   const diagnostics: Record<string, unknown> = {
     timestamp: new Date().toISOString(),
     environment: {
-      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ? "SET" : "MISSING",
-      supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? "SET" : "MISSING",
-      urlValue: process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 30) || "none",
+      supabaseUrl: supabaseUrl() ? "SET" : "MISSING",
+      supabaseKey: publishableKey() ? "SET" : "MISSING",
+      urlValue: supabaseUrl()?.substring(0, 30) || "none",
     },
     tests: {},
   };

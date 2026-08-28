@@ -11,6 +11,7 @@ import type {
   DBCalibration 
 } from '../types/learning';
 import { getFactorRecommendationsForAI } from './factor-tracker';
+import { secretKey, supabaseUrl } from "@craudioviz/platform-sdk";
 
 // ⚠️ _supabase MUST be declared before getSupabase() — TDZ guard
 let _supabase: ReturnType<typeof createClient> | null = null;
@@ -30,8 +31,8 @@ function getSupabase() {
   // no-store: Next 14 caches PostgREST GETs by URL and serves stale rows.
   if (_supabase) return _supabase;
   const sb = require('@supabase/supabase-js');
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const url = supabaseUrl();
+  const key = secretKey();
   if (!url || !key) return null;
   _supabase = sb.createClient(url, key, {
     auth: { persistSession: false },
@@ -44,8 +45,8 @@ function getSupabase() {
 // SUPABASE CLIENT
 // ============================================================================
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const SUPABASE_URL = supabaseUrl();
+const supabaseServiceKey = secretKey();
 
 
 // ============================================================================

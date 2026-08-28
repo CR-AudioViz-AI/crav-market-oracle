@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { secretKey, publishableKey, supabaseUrl } from "@craudioviz/platform-sdk";
 
 export const dynamic = "force-dynamic";
 
@@ -20,8 +21,8 @@ function getSupabase() {
   // no-store: Next 14 caches PostgREST GETs by URL and serves stale rows.
   if (_supabase) return _supabase;
   const sb = require('@supabase/supabase-js');
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const url = supabaseUrl();
+  const key = secretKey();
   if (!url || !key) return null;
   _supabase = sb.createClient(url, key, {
     auth: { persistSession: false },
@@ -32,8 +33,8 @@ function getSupabase() {
 
 export const runtime = "nodejs";
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://kteobfyferrukqeolofj.supabase.co';
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt0ZW9iZnlmZXJydWtxZW9sb2ZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxOTcyNjYsImV4cCI6MjA3NzU1NzI2Nn0.uy-jlF_z6qVb8qogsNyGDLHqT4HhmdRhLrW7zPv3qhY';
+const SUPABASE_URL = supabaseUrl();
+const SUPABASE_ANON_KEY = publishableKey();
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);

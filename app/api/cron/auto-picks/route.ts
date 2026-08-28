@@ -3,6 +3,7 @@
 // Triggered by Vercel cron: weekdays at 9:35 AM ET
 // CR AudioViz AI · May 2026
 import { NextResponse } from 'next/server'
+import { secretKey, supabaseUrl } from "@craudioviz/platform-sdk";
 export const dynamic = 'force-dynamic'
 export const maxDuration = 300
 
@@ -18,8 +19,8 @@ function getSupabase() {
   // Same corruption as 27 sibling files, landing at a different point.
   if (_supabase) return _supabase;
   const { createClient } = require('@supabase/supabase-js');
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+  const url = supabaseUrl();
+  const key = secretKey();
   if (!url || !key) return null;
   _supabase = createClient(url, key, {
     auth: { persistSession: false },

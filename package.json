@@ -30,7 +30,8 @@
     "recharts": "^2.12.7",
     "tailwind-merge": "^2.5.3",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "@craudioviz/platform-sdk": "git+https://github.com/CR-AudioViz-AI/platform-sdk.git"
   },
   "devDependencies": {
     "@types/node": "^20",

@@ -13,13 +13,14 @@
 //
 // CR AudioViz AI · EIN 39-3646201 · August 2026
 import { createClient as createSupabaseClient, type SupabaseClient } from '@supabase/supabase-js'
+import { publishableKey, supabaseUrl } from "@craudioviz/platform-sdk";
 
 let browserClient: SupabaseClient | null = null
 
 export function createClient(): SupabaseClient {
   if (browserClient) return browserClient
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  const url = supabaseUrl()
+  const key = publishableKey()
   if (!url) throw new Error('NEXT_PUBLIC_SUPABASE_URL is not set')
   if (!key) throw new Error('NEXT_PUBLIC_SUPABASE_ANON_KEY is not set')
   browserClient = createSupabaseClient(url, key, {
