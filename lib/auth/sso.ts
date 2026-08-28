@@ -17,6 +17,7 @@
 //
 // CR AudioViz AI · EIN 39-3646201 · August 2026
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import { publishableKey, supabaseUrl } from "@craudioviz/platform-sdk";
 
 const CORE_ORIGIN = 'https://craudiovizai.com'
 const ATTEMPTED = 'javari-sso-attempted'
@@ -24,8 +25,8 @@ const ATTEMPTED = 'javari-sso-attempted'
 let client: SupabaseClient | null = null
 function db(): SupabaseClient {
   if (client) return client
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  const url = supabaseUrl()
+  const key = publishableKey()
   if (!url || !key) throw new Error('Supabase env not configured')
   client = createClient(url, key, {
     auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: 'pkce' },

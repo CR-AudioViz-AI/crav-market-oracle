@@ -4,6 +4,7 @@
 // ADMIN ONLY - Initialize database tables
 
 import { NextRequest, NextResponse } from 'next/server';
+import { secretKey, supabaseUrl } from "@craudioviz/platform-sdk";
 
 export const dynamic = "force-dynamic";
 
@@ -25,8 +26,8 @@ function getSupabase() {
   // no-store: Next 14 caches PostgREST GETs by URL and serves stale rows.
   if (_supabase) return _supabase;
   const sb = require('@supabase/supabase-js');
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const url = supabaseUrl();
+  const key = secretKey();
   if (!url || !key) return null;
   _supabase = sb.createClient(url, key, {
     auth: { persistSession: false },
@@ -49,10 +50,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const SUPABASE_URL = supabaseUrl();
+    const supabaseServiceKey = secretKey();
 
-    if (!supabaseUrl || !supabaseServiceKey) {
+    if (!SUPABASE_URL || !supabaseServiceKey) {
       return NextResponse.json({ error: 'Missing Supabase configuration' }, { status: 500 });
     }
 
@@ -62,7 +63,7 @@ export async function POST(request: NextRequest) {
     // already obtains the SDK via require inside getSupabase(); this call site was
     // missed. Now uses the same runtime import.
     const { createClient: _mk } = require('@supabase/supabase-js');
-    const supabase = _mk(supabaseUrl, supabaseServiceKey);
+    const supabase = _mk(SUPABASE_URL, supabaseServiceKey);
 
     const results: { table: string; status: string; error?: string }[] = [];
 

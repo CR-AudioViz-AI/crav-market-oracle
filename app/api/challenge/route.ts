@@ -4,6 +4,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { secretKey, supabaseUrl } from "@craudioviz/platform-sdk";
 
 export const dynamic = 'force-dynamic';
 
@@ -24,8 +25,8 @@ export const dynamic = 'force-dynamic';
 let _supabase: ReturnType<typeof createClient> | null = null;
 function getSupabase(): ReturnType<typeof createClient> | null {
   if (_supabase) return _supabase;
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const url = supabaseUrl();
+  const key = secretKey();
   if (!url || !key) return null;
   _supabase = createClient(url, key, {
     auth: { persistSession: false },
