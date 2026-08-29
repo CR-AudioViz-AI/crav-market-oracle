@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { urlSegment } from '@craudioviz/platform-sdk/lib/egress-guard';
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 300 // 5 minutes max
@@ -7,7 +8,7 @@ export const maxDuration = 300 // 5 minutes max
 async function fetchStockPrice(symbol: string): Promise<number | null> {
   try {
     // Use Yahoo Finance query API (free, no key needed)
-    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1m&range=1d`
+    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${urlSegment(symbol, /^[A-Za-z0-9.\-]{1,12}$/)}?interval=1m&range=1d`
     
     const response = await fetch(url, {
       headers: {

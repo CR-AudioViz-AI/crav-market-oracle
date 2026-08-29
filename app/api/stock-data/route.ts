@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { secretKey, supabaseUrl } from "@craudioviz/platform-sdk";
+import { urlSegment } from '@craudioviz/platform-sdk/lib/egress-guard';
 
 export const dynamic = 'force-dynamic';
 
@@ -50,7 +51,10 @@ interface StockData {
 async function fetchYahooData(ticker: string): Promise<StockData | null> {
   try {
     const response = await fetch(
-      `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d`,
+      // urlSegment, not raw interpolation. A ticker of "../../v7/finance/quote"
+      // walks to a different endpoint and one containing ? or # truncates the
+      // query string this call believes it is sending.
+      `https://query1.finance.yahoo.com/v8/finance/chart/${urlSegment(ticker, /^[A-Za-z0-9.\-]{1,12}$/)}?interval=1d&range=1d`,
       { headers: { 'User-Agent': 'Mozilla/5.0' } }
     );
 

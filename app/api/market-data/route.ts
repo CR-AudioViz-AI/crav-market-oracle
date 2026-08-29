@@ -16,6 +16,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { urlSegment } from '@craudioviz/platform-sdk/lib/egress-guard';
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -234,7 +235,10 @@ async function fetchFMPFundamentals(symbol: string): Promise<FundamentalsData | 
   
   try {
     const response = await fetch(
-      `https://financialmodelingprep.com/api/v3/profile/${symbol}?apikey=${API_KEYS.fmp}`
+      // The API KEY is in this query string. A symbol containing # would
+      // truncate the URL before it and a symbol containing & could append a
+      // parameter of the attacker's choosing.
+      `https://financialmodelingprep.com/api/v3/profile/${urlSegment(symbol, /^[A-Za-z0-9.\-]{1,12}$/)}?apikey=${API_KEYS.fmp}`
     );
     const data = await response.json();
     const profile = data[0];
@@ -364,7 +368,7 @@ async function fetchCryptoData(symbol: string): Promise<QuoteData | null> {
     const coinId = symbolMap[symbol.toUpperCase()] || symbol.toLowerCase();
     
     const response = await fetch(
-      `https://api.coingecko.com/api/v3/coins/${coinId}?localization=false&tickers=false&community_data=false&developer_data=false`
+      `https://api.coingecko.com/api/v3/coins/${urlSegment(coinId, /^[a-z0-9\-]{1,40}$/)}?localization=false&tickers=false&community_data=false&developer_data=false`
     );
     const data = await response.json();
     
