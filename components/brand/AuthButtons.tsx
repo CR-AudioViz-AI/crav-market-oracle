@@ -1,3 +1,13 @@
+// 2026-09-03: auth lives on the CENTRAL platform, not on each satellite.
+//
+// An ecosystem sweep with Javari Verify found /login and /signup returning 404 on
+// every vertical that renders this component. The links were local; the pages are
+// on craudiovizai.com, which is where sign-in has always happened — a satellite
+// has no auth routes of its own and never had.
+//
+// Absolute URLs rather than relative, because the destination genuinely is another
+// origin. A Next <Link> to an external origin also needs a plain anchor, which is
+// why these are <a> and not <Link>.
 'use client';
 
 import React from 'react';
@@ -70,8 +80,8 @@ export function AuthButtons({ isLoggedIn, userName, userEmail, onLogout }: AuthB
   return (
     <div className="flex items-center gap-2">
       {/* Log In Button */}
-      <Link
-        href="/login"
+      <a
+          href="https://craudiovizai.com/auth/login"
         className="inline-flex items-center justify-center min-h-[44px] px-4 py-2
                    text-sm font-medium text-slate-600 dark:text-slate-400
                    hover:text-slate-900 dark:hover:text-slate-100
@@ -79,11 +89,11 @@ export function AuthButtons({ isLoggedIn, userName, userEmail, onLogout }: AuthB
                    rounded-lg transition-colors"
       >
         Log In
-      </Link>
+      </a>
       
       {/* Sign Up Button */}
-      <Link
-        href="/signup"
+      <a
+          href="https://craudiovizai.com/auth/signup"
         className="inline-flex items-center justify-center min-h-[44px] px-4 py-2
                    text-sm font-medium text-white
                    bg-cyan-600 hover:bg-cyan-700
@@ -91,7 +101,7 @@ export function AuthButtons({ isLoggedIn, userName, userEmail, onLogout }: AuthB
                    rounded-lg transition-colors shadow-sm"
       >
         Sign Up
-      </Link>
+      </a>
     </div>
   );
 }
