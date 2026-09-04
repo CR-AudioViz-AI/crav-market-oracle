@@ -41,13 +41,54 @@ const FEATURE_COSTS = {
 };
 
 // POST /api/premium/use-feature - Deduct credits for premium feature
+
+/**
+ * 2026-09-04: the caller's identity comes from their bearer token, never from the
+ * request body or query string.
+ *
+ * These handlers took a user id from the caller and used it against a
+ * SERVICE-ROLE client, which bypasses row level security entirely. Nothing
+ * authenticated anybody.
+ *
+ * On /api/premium/use-feature that meant anyone could SPEND another person's
+ * credits by posting their id with a feature name. On /api/challenge it meant
+ * reading and writing somebody else's challenge progress.
+ *
+ * The fix is not to validate the id better. It is to stop accepting one, which
+ * removes the whole class rather than each route's version of it.
+ */
+async function callerId(request: Request): Promise<string | null> {
+  const header = request.headers.get('authorization') ?? '';
+  const token = header.startsWith('Bearer ') ? header.slice(7).trim() : null;
+  if (!token) return null;
+  const sb = getSupabase();
+  if (!sb) return null;
+  try {
+    const { data, error } = await sb.auth.getUser(token);
+    if (error || !data?.user) return null;
+    return data.user.id;
+  } catch {
+    return null;
+  }
+}
+
+function unauthorised(): NextResponse {
+  return NextResponse.json(
+    { error: 'Sign in required.', code: 'AUTH_REQUIRED' },
+    { status: 401 },
+  );
+}
+
 export async function POST(req: NextRequest) {
   const supabase = getSupabase()!
   try {
     const body = await req.json();
-    const { user_id, feature, metadata } = body;
+    // user_id deliberately not read from the body — accepting one is the defect.
+    const { feature, metadata } = body;
+    const user_id = await callerId(req);
+    if (!user_id) return unauthorised();
 
-    if (!user_id || !feature) {
+    if (!feature) {
       return NextResponse.json({ error: "user_id and feature required" }, { status: 400 });
     }
 

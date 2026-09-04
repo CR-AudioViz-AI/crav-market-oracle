@@ -77,11 +77,50 @@ interface ChallengeEnrollment {
 
 // ----- API HANDLERS -----
 
+
+/**
+ * 2026-09-04: the caller's identity comes from their bearer token, never from the
+ * request body or query string.
+ *
+ * These handlers took a user id from the caller and used it against a
+ * SERVICE-ROLE client, which bypasses row level security entirely. Nothing
+ * authenticated anybody.
+ *
+ * On /api/premium/use-feature that meant anyone could SPEND another person's
+ * credits by posting their id with a feature name. On /api/challenge it meant
+ * reading and writing somebody else's challenge progress.
+ *
+ * The fix is not to validate the id better. It is to stop accepting one, which
+ * removes the whole class rather than each route's version of it.
+ */
+async function callerId(request: Request): Promise<string | null> {
+  const header = request.headers.get('authorization') ?? '';
+  const token = header.startsWith('Bearer ') ? header.slice(7).trim() : null;
+  if (!token) return null;
+  const sb = getSupabase();
+  if (!sb) return null;
+  try {
+    const { data, error } = await sb.auth.getUser(token);
+    if (error || !data?.user) return null;
+    return data.user.id;
+  } catch {
+    return null;
+  }
+}
+
+function unauthorised(): NextResponse {
+  return NextResponse.json(
+    { error: 'Sign in required.', code: 'AUTH_REQUIRED' },
+    { status: 401 },
+  );
+}
+
 export async function GET(request: NextRequest) {
   const supabase = getSupabase()!
   const url = new URL(request.url);
   const action = url.searchParams.get('action') || 'status';
-  const userId = url.searchParams.get('userId');
+  const userId = await callerId(request);
+  if (!userId) return unauthorised();
   const challengeId = url.searchParams.get('challengeId');
   
   try {
@@ -106,7 +145,10 @@ export async function POST(request: NextRequest) {
   const supabase = getSupabase()!
   try {
     const body = await request.json();
-    const { action, userId, challengeId, data } = body;
+    // userId deliberately not read from the body.
+    const { action, challengeId, data } = body;
+    const userId = await callerId(request);
+    if (!userId) return unauthorised();
     
     switch (action) {
       case 'enroll':
