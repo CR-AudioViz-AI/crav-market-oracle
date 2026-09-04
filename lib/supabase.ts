@@ -238,3 +238,42 @@ export async function getRecentWinners(limit = 5, assetType?: AssetType): Promis
   if (error) throw error
   return (data ?? []) as Pick[]
 }
+
+// ---------------------------------------------------------------------------
+// 2026-09-05: the named picks helpers, and two re-exports.
+//
+// Five imports across the app named exports this module does not have:
+// getAllStockPicks, getCryptoPicks, getPennyStockPicks, StockPick and AI_MODELS.
+// The first three were never written anywhere; the last two live in
+// lib/ai-prediction-engine.ts and lib/types/ai-models.ts.
+//
+// Webpack built the app regardless and the pages threw at runtime. Turbopack,
+// the default builder from Next 16, refuses the imports outright - which is the
+// only reason anybody noticed that /crypto and /backtesting have never worked.
+//
+// The three helpers are thin wrappers over getPicks, which already does the
+// work. Written here rather than at the call sites so the asset-type strings
+// live in one place: a page that filters on 'penny' instead of 'penny_stock'
+// silently returns nothing, and nothing about an empty list says why.
+
+/** Every pick, newest first. */
+export async function getAllStockPicks(): Promise<Pick[]> {
+  return getPicks({});
+}
+
+/** Crypto picks only. */
+export async function getCryptoPicks(): Promise<Pick[]> {
+  return getPicks({ assetType: 'crypto' });
+}
+
+/** Penny stocks only. Note the asset_type value is 'penny_stock', not 'penny'. */
+export async function getPennyStockPicks(): Promise<Pick[]> {
+  return getPicks({ assetType: 'penny_stock' });
+}
+
+// Re-exported so the pages can keep importing from one module. StockPick is the
+// engine's name for the same shape this file calls Pick; both are kept because
+// renaming a type across an app is a larger change than this fix warrants.
+export type { StockPick } from './ai-prediction-engine';
+export { AI_MODELS } from './types/ai-models';
+
