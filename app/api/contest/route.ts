@@ -1,3 +1,13 @@
+// 2026-09-04: retired model replaced.
+//
+// gemini-1.5-flash no longer exists at the provider. A request naming it returns 404, and
+// most call sites treat a failed completion as an empty answer - so the feature
+// degrades silently rather than erroring, and nobody reports it.
+//
+// gemini-flash-latest is the current equivalent under the platform's cost order, verified
+// answering this session. Found by sweeping the fleet with core's
+// audit-model-names guard, which no satellite runs: core has had it since
+// 25 August, when every free model named in the codebase turned out to be retired.
 // Market Oracle - Contest System API
 // Quarterly stock picking competitions
 // Q1 2025 Contest Launch: January 1, 2025
@@ -86,7 +96,7 @@ const CONTESTS: Contest[] = [
 const AI_CONTESTANTS = [
   { id: 'claude-ai', name: 'Claude AI', model: 'claude-3-5-sonnet', avatar: '🤖', tier: 'premium' },
   { id: 'gpt4-ai', name: 'GPT-4', model: 'gpt-4o', avatar: '🧠', tier: 'premium' },
-  { id: 'gemini-ai', name: 'Gemini', model: 'gemini-1.5-flash', avatar: '✨', tier: 'standard' },
+  { id: 'gemini-ai', name: 'Gemini', model: 'gemini-flash-latest', avatar: '✨', tier: 'standard' },
   { id: 'llama-ai', name: 'Llama 3.1', model: 'llama-3.1-70b', avatar: '🦙', tier: 'standard' },
   { id: 'perplexity-ai', name: 'Perplexity', model: 'pplx-70b', avatar: '🔮', tier: 'standard' },
   { id: 'mistral-ai', name: 'Mistral', model: 'mistral-large', avatar: '💨', tier: 'standard' },
