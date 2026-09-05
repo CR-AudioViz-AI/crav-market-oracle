@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prebuild": "node scripts/audit-route-auth.mjs"
+    "prebuild": "node scripts/audit-route-auth.mjs && node scripts/audit-model-names.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",
