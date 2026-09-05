@@ -1,3 +1,13 @@
+// 2026-09-04: retired model replaced.
+//
+// gpt-4-turbo-preview no longer exists at the provider. A request naming it returns 404, and
+// most call sites treat a failed completion as an empty answer - so the feature
+// degrades silently rather than erroring, and nobody reports it.
+//
+// gpt-4.1-nano is the current equivalent under the platform's cost order, verified
+// answering this session. Found by sweeping the fleet with core's
+// audit-model-names guard, which no satellite runs: core has had it since
+// 25 August, when every free model named in the codebase turned out to be retired.
 // app/api/cron/daily-battle/route.ts
 // PRODUCTION CRON JOB: Daily AI Battle Automation
 // Runs daily at 9:30 AM EST (market open + 30 min)
@@ -24,11 +34,11 @@ function getSupabase() {
 }
 // AI Model Configuration
 const AI_MODELS = [
-  { id: 'a1000000-0000-0000-0000-000000000001', name: 'TechVanguard AI', provider: 'openai', model: 'gpt-4-turbo-preview' },
+  { id: 'a1000000-0000-0000-0000-000000000001', name: 'TechVanguard AI', provider: 'openai', model: 'gpt-4.1-nano' },
   { id: 'a2000000-0000-0000-0000-000000000002', name: 'ValueHunter Pro', provider: 'anthropic', model: 'claude-sonnet-4-20250514' },
-  { id: 'a3000000-0000-0000-0000-000000000003', name: 'SwingTrader X', provider: 'openai', model: 'gpt-4-turbo-preview' },
+  { id: 'a3000000-0000-0000-0000-000000000003', name: 'SwingTrader X', provider: 'openai', model: 'gpt-4.1-nano' },
   { id: 'a4000000-0000-0000-0000-000000000004', name: 'DividendKing', provider: 'anthropic', model: 'claude-sonnet-4-20250514' },
-  { id: 'a5000000-0000-0000-0000-000000000005', name: 'CryptoQuantum', provider: 'openai', model: 'gpt-4-turbo-preview' },
+  { id: 'a5000000-0000-0000-0000-000000000005', name: 'CryptoQuantum', provider: 'openai', model: 'gpt-4.1-nano' },
   { id: 'a6000000-0000-0000-0000-000000000006', name: 'GlobalMacro AI', provider: 'google', model: 'gemini-2.0-flash-exp' },
 ];
 
