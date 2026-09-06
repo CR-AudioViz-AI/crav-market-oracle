@@ -377,7 +377,7 @@ export async function addCredits(
  */
 export async function getSubscription(userId: string): Promise<JavariverseSubscription | null> {
   const { data } = await supabase
-    .from('javariverse_subscriptions')
+    .from('user_subscriptions')
     .select(`
       *,
       plan:javariverse_subscription_plans(name, credits_monthly)
