@@ -156,7 +156,7 @@ export async function signUp(email: string, password: string, displayName?: stri
       .single();
       
     if (profile) {
-      await supabase.from('javariverse_credits').insert({
+      await supabase.from('user_credits').insert({
         user_id: profile.id,
         balance: 50,
         lifetime_earned: 50,
@@ -202,7 +202,7 @@ export async function getSession() {
  */
 export async function getCredits(userId: string): Promise<JavariverseCredits | null> {
   const { data } = await supabase
-    .from('javariverse_credits')
+    .from('user_credits')
     .select('*')
     .eq('user_id', userId)
     .single();
@@ -223,7 +223,7 @@ export async function deductCredits(
   try {
     // Get current balance
     const { data: credits } = await supabase
-      .from('javariverse_credits')
+      .from('user_credits')
       .select('*')
       .eq('user_id', userId)
       .single();
@@ -260,7 +260,7 @@ export async function deductCredits(
     
     // Update balance
     const { error: updateError } = await supabase
-      .from('javariverse_credits')
+      .from('user_credits')
       .update({
         balance: newBalance,
         bonus_balance: newBonusBalance,
@@ -316,14 +316,14 @@ export async function addCredits(
 ): Promise<{ success: boolean; new_balance: number; error?: string }> {
   try {
     const { data: credits } = await supabase
-      .from('javariverse_credits')
+      .from('user_credits')
       .select('*')
       .eq('user_id', userId)
       .single();
       
     if (!credits) {
       // Create credits record if doesn't exist
-      await supabase.from('javariverse_credits').insert({
+      await supabase.from('user_credits').insert({
         user_id: userId,
         balance: amount,
         lifetime_earned: amount,
@@ -344,7 +344,7 @@ export async function addCredits(
     const newBalance = credits.balance + amount;
     
     await supabase
-      .from('javariverse_credits')
+      .from('user_credits')
       .update({
         balance: newBalance,
         lifetime_earned: credits.lifetime_earned + amount,
