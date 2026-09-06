@@ -596,7 +596,7 @@ export async function applyReferralCode(userId: string, code: string) {
   
   // Check if already referred
   const { data: existing } = await supabase
-    .from('javariverse_referrals')
+    .from('referrals')
     .select('id')
     .eq('referred_id', userId)
     .single();
@@ -606,7 +606,7 @@ export async function applyReferralCode(userId: string, code: string) {
   }
   
   // Create referral record
-  await supabase.from('javariverse_referrals').insert({
+  await supabase.from('referrals').insert({
     referrer_id: referrer.id,
     referred_id: userId,
     referral_code: code,
