@@ -41,7 +41,7 @@ export async function getSession(c?: SupabaseClient) {
 }
 export async function logActivity(p: { userId?: string; action: string; details?: Record<string, unknown>; appId?: string }) {
   try {
-    await getSupabaseAdmin().from("activity_log").insert({
+    await getSupabaseAdmin().from("javari_activity_log").insert({
       user_id: p.userId ?? "anon", action: p.action,
       details: p.details ?? {}, app_id: p.appId ?? "javari",
       created_at: new Date().toISOString()
