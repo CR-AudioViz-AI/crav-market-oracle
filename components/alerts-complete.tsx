@@ -106,7 +106,7 @@ export default function AlertsComplete() {
 
       // Load available stocks
       const { data: picks } = await supabase
-        .from('ai_stock_picks')
+        .from('stock_picks')
         .select('ticker, ai_name, current_price, price')
         .not('current_price', 'is', null);
 
