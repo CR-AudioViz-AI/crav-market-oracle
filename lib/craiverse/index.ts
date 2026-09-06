@@ -510,7 +510,7 @@ export async function submitEnhancement(
   category: 'feature' | 'improvement' | 'integration' | 'ui_ux' | 'performance' | 'other'
 ) {
   const { data, error } = await supabase
-    .from('javariverse_enhancements')
+    .from('enhancement_requests')
     .insert({
       author_id: userId,
       title,
@@ -553,7 +553,7 @@ export async function voteEnhancement(
   const voteCount = votes?.reduce((sum, v) => sum + v.vote, 0) || 0;
   
   await supabase
-    .from('javariverse_enhancements')
+    .from('enhancement_requests')
     .update({ vote_count: voteCount })
     .eq('id', enhancementId);
 }
