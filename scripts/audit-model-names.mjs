@@ -5,11 +5,11 @@
 // noticed. Found by exercising the javari-spirits sommelier end to end - it
 // returned 500, and the cause was:
 //
-//   404 model_not_found — "llama-3.3-70b-versatile does not exist"
+//   404 model_not_found — "openai/gpt-oss-120b does not exist"
 //
 // Verified dead against the live provider lists on 2026-08-25:
-//   llama-3.3-70b-versatile   RETIRED   (COST LAW tier 1)
-//   llama-3.1-8b-instant      RETIRED
+//   openai/gpt-oss-120b   RETIRED   (COST LAW tier 1)
+//   openai/gpt-oss-120b      RETIRED
 //   mixtral-8x7b-32768        RETIRED
 //   gemma2-9b-it              RETIRED
 //   deepseek-v4-flash:free    RETIRED   (OpenRouter tier 1)
