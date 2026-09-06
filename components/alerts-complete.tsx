@@ -134,7 +134,19 @@ export default function AlertsComplete() {
   const loadUserAlerts = async (uid: string) => {
     try {
       const { data, error } = await supabase
-        .from('user_alerts')
+        .// 2026-09-07: market_user_alerts, not user_alerts.
+      //
+      // The table did not exist under either name - every read returned
+      // PostgREST 42P01, which fails the whole query, so this list has always
+      // rendered empty and that looked like "no alerts set".
+      //
+      // Named to match orlando_user_alerts and bv_price_alerts. The per-app
+      // pattern is right here: the watched entity differs - a resort, a bottle,
+      // a ticker - and one table cannot reference all three without a
+      // polymorphic key. What the generic name would have cost is somebody
+      // reasonably assuming it is platform-wide and writing to it from another
+      // app.
+      from('market_user_alerts')
         .select('*')
         .eq('user_id', uid)
         .order('created_at', { ascending: false });
@@ -166,7 +178,19 @@ export default function AlertsComplete() {
       }
 
       const { data, error } = await supabase
-        .from('user_alerts')
+        .// 2026-09-07: market_user_alerts, not user_alerts.
+      //
+      // The table did not exist under either name - every read returned
+      // PostgREST 42P01, which fails the whole query, so this list has always
+      // rendered empty and that looked like "no alerts set".
+      //
+      // Named to match orlando_user_alerts and bv_price_alerts. The per-app
+      // pattern is right here: the watched entity differs - a resort, a bottle,
+      // a ticker - and one table cannot reference all three without a
+      // polymorphic key. What the generic name would have cost is somebody
+      // reasonably assuming it is platform-wide and writing to it from another
+      // app.
+      from('market_user_alerts')
         .insert([alertData])
         .select()
         .single();
@@ -186,7 +210,19 @@ export default function AlertsComplete() {
   const deleteAlert = async (alertId: string) => {
     try {
       const { error } = await supabase
-        .from('user_alerts')
+        .// 2026-09-07: market_user_alerts, not user_alerts.
+      //
+      // The table did not exist under either name - every read returned
+      // PostgREST 42P01, which fails the whole query, so this list has always
+      // rendered empty and that looked like "no alerts set".
+      //
+      // Named to match orlando_user_alerts and bv_price_alerts. The per-app
+      // pattern is right here: the watched entity differs - a resort, a bottle,
+      // a ticker - and one table cannot reference all three without a
+      // polymorphic key. What the generic name would have cost is somebody
+      // reasonably assuming it is platform-wide and writing to it from another
+      // app.
+      from('market_user_alerts')
         .delete()
         .eq('id', alertId);
 
@@ -201,7 +237,19 @@ export default function AlertsComplete() {
   const toggleAlert = async (alertId: string, isActive: boolean) => {
     try {
       const { error } = await supabase
-        .from('user_alerts')
+        .// 2026-09-07: market_user_alerts, not user_alerts.
+      //
+      // The table did not exist under either name - every read returned
+      // PostgREST 42P01, which fails the whole query, so this list has always
+      // rendered empty and that looked like "no alerts set".
+      //
+      // Named to match orlando_user_alerts and bv_price_alerts. The per-app
+      // pattern is right here: the watched entity differs - a resort, a bottle,
+      // a ticker - and one table cannot reference all three without a
+      // polymorphic key. What the generic name would have cost is somebody
+      // reasonably assuming it is platform-wide and writing to it from another
+      // app.
+      from('market_user_alerts')
         .update({ is_active: !isActive })
         .eq('id', alertId);
 
