@@ -131,7 +131,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Log usage
-    await supabase.from("javariverse_app_usage").insert({
+    await supabase.from("javari_usage_analytics").insert({
       user_id,
       app_slug: "market-oracle",
       feature_used: feature,
