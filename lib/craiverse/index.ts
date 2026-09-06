@@ -486,7 +486,7 @@ export async function trackUsage(
     .single();
     
   if (app) {
-    await supabase.from('javariverse_app_usage').insert({
+    await supabase.from('javari_usage_analytics').insert({
       app_id: app.id,
       user_id: userId,
       action,
