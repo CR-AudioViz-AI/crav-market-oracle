@@ -163,7 +163,7 @@ export async function signUp(email: string, password: string, displayName?: stri
       });
       
       // Log the transaction
-      await supabase.from('javariverse_credit_transactions').insert({
+      await supabase.from('credit_transactions').insert({
         user_id: profile.id,
         amount: 50,
         balance_after: 50,
@@ -272,7 +272,7 @@ export async function deductCredits(
     if (updateError) throw updateError;
     
     // Log transaction
-    await supabase.from('javariverse_credit_transactions').insert({
+    await supabase.from('credit_transactions').insert({
       user_id: userId,
       amount: -amount,
       balance_after: newBalance,
@@ -329,7 +329,7 @@ export async function addCredits(
         lifetime_earned: amount,
       });
       
-      await supabase.from('javariverse_credit_transactions').insert({
+      await supabase.from('credit_transactions').insert({
         user_id: userId,
         amount: amount,
         balance_after: amount,
@@ -352,7 +352,7 @@ export async function addCredits(
       })
       .eq('user_id', userId);
       
-    await supabase.from('javariverse_credit_transactions').insert({
+    await supabase.from('credit_transactions').insert({
       user_id: userId,
       amount: amount,
       balance_after: newBalance,
