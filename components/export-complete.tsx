@@ -109,7 +109,7 @@ export default function ExportComplete() {
 
       if (exportOptions.dataType === 'picks' || exportOptions.dataType === 'all') {
         const { data: picksData, error } = await supabase
-          .from('ai_stock_picks')
+          .from('stock_picks')
           .select('*')
           .gte('created_at', startDate.toISOString());
 
