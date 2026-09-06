@@ -701,7 +701,7 @@ export const AI_MODELS: Record<AIModelId, AIModelConfig> = {
     tier: 'small',
     name: 'Llama 3.1 8B',
     displayName: 'Llama Quick',
-    modelString: 'llama-3.1-8b-instant',
+    modelString: 'openai/gpt-oss-120b',
     description: 'Lightning fast small model - FREE',
     personality: 'Ultra-fast basic analyst',
     tradingStyle: 'momentum',
