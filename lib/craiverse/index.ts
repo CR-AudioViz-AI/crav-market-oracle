@@ -410,7 +410,7 @@ export async function createTicket(
   priority: 'low' | 'medium' | 'high' | 'urgent' = 'medium'
 ) {
   const { data, error } = await supabase
-    .from('javariverse_tickets')
+    .from('support_tickets')
     .insert({
       user_id: userId,
       subject,
@@ -432,7 +432,7 @@ export async function createTicket(
  */
 export async function getTickets(userId: string, status?: string) {
   let query = supabase
-    .from('javariverse_tickets')
+    .from('support_tickets')
     .select('*')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
