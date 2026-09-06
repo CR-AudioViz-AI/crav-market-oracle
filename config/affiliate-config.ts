@@ -161,7 +161,7 @@ export const AFFILIATE_PROGRAMS = {
     viator: {
       id: 'viator',
       name: 'Viator',
-      category: 'activities',
+      category: 'bv_activities',
       commission: '8%',
       cookieDays: 30,
       apps: ['javari-travel', 'javari-orlando'],
@@ -169,7 +169,7 @@ export const AFFILIATE_PROGRAMS = {
     getyourguide: {
       id: 'getyourguide',
       name: 'GetYourGuide',
-      category: 'activities',
+      category: 'bv_activities',
       commission: '8%',
       cookieDays: 30,
       apps: ['javari-travel', 'javari-orlando'],
