@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
 
     // Check user credits
     const { data: credits, error: creditsError } = await supabase
-      .from("javariverse_credits")
+      .from("user_credits")
       .select("balance")
       .eq("user_id", user_id)
       .single();
