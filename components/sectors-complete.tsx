@@ -161,7 +161,7 @@ export default function SectorsComplete() {
     try {
       // Get all stock picks with current prices
       const { data: picks, error } = await supabase
-        .from('ai_stock_picks')
+        .from('stock_picks')
         .select('ticker, price, current_price')
         .not('current_price', 'is', null);
 
