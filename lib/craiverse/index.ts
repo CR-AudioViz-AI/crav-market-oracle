@@ -457,7 +457,7 @@ export async function logActivity(
   action: string,
   metadata?: Record<string, any>
 ) {
-  await supabase.from('javariverse_activity_log').insert({
+  await supabase.from('javari_activity_log').insert({
     user_id: userId,
     action,
     source_app: JAVARIVERSE_CONFIG.appSlug,
