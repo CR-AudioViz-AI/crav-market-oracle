@@ -161,7 +161,7 @@ const AI_MODELS: Record<string, AIModelConfig> = {
   },
   'llama-3-8b': {
     id: 'llama-3-8b', provider: 'groq', tier: 'small',
-    name: 'Llama 3 8B', displayName: 'Llama Quick', modelString: 'llama-3.1-8b-instant',
+    name: 'Llama 3 8B', displayName: 'Llama Quick', modelString: 'openai/gpt-oss-120b',
     description: 'Ultra-fast via Groq', personality: 'Instant analyst',
     tradingStyle: 'momentum', avatar: '🦙', color: '#6366F1', enabled: !!process.env.GROQ_API_KEY,
   },
