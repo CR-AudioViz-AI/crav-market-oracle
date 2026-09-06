@@ -83,7 +83,7 @@ export default function VotingVisualization({ pickId, ticker }: VotingVisualizat
     try {
       if (pickId || ticker) {
         // Load specific pick vote data
-        let query = supabase.from('ai_stock_picks').select('*');
+        let query = supabase.from('stock_picks').select('*');
         
         if (pickId) {
           query = query.eq('id', pickId);
@@ -115,7 +115,7 @@ export default function VotingVisualization({ pickId, ticker }: VotingVisualizat
 
       // Load all picks for comparison view
       const { data: allPicks, error: allError } = await supabase
-        .from('ai_stock_picks')
+        .from('stock_picks')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(20);
