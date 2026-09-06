@@ -87,7 +87,7 @@ interface GamificationSystemProps {
 }
 
 export default function GamificationSystem({ appContext }: GamificationSystemProps) {
-  const [activeTab, setActiveTab] = useState<'overview' | 'achievements' | 'challenges' | 'leaderboard' | 'rewards'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'achievements' | 'competitions' | 'leaderboard' | 'rewards'>('overview')
 
   const userStats: UserStats = {
     level: 23,
@@ -155,7 +155,7 @@ export default function GamificationSystem({ appContext }: GamificationSystemPro
         {[
           { id: 'overview', label: 'Overview', icon: Star },
           { id: 'achievements', label: 'Achievements', icon: Trophy },
-          { id: 'challenges', label: 'Challenges', icon: Target },
+          { id: 'competitions', label: 'Challenges', icon: Target },
           { id: 'leaderboard', label: 'Leaderboard', icon: Crown },
           { id: 'rewards', label: 'Rewards', icon: Gift },
         ].map(tab => (
@@ -181,7 +181,7 @@ export default function GamificationSystem({ appContext }: GamificationSystemPro
               <h3 className="font-semibold flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-violet-400" /> Daily Challenges
               </h3>
-              <button onClick={() => setActiveTab('challenges')} className="text-sm text-violet-400">View All</button>
+              <button onClick={() => setActiveTab('competitions')} className="text-sm text-violet-400">View All</button>
             </div>
             <div className="space-y-3">
               {DAILY_CHALLENGES.map(challenge => (
