@@ -94,7 +94,7 @@ export default function DashboardComplete() {
     try {
       // Load AI performance data
       const { data: picks, error: picksError } = await supabase
-        .from('ai_stock_picks')
+        .from('stock_picks')
         .select('*')
         .order('created_at', { ascending: false });
 
