@@ -113,7 +113,7 @@ export default function MyPositionsComplete() {
       // Get current prices for all tickers
       const tickers = [...new Set(positionsData.map(p => p.ticker))];
       const { data: pricesData } = await supabase
-        .from('ai_stock_picks')
+        .from('stock_picks')
         .select('ticker, current_price, last_updated')
         .in('ticker', tickers);
 
