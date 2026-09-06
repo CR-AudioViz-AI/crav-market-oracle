@@ -75,7 +75,7 @@ Respond ONLY with valid JSON array. No preamble. Example:
   for (const [url, headers, body] of [
     ['https://api.groq.com/openai/v1/chat/completions',
      { 'Content-Type': 'application/json', Authorization: `Bearer ${GROQ}` },
-     JSON.stringify({ model: 'llama-3.3-70b-versatile', max_tokens: 800, temperature: 0.3, messages: [{ role: 'user', content: prompt }] })],
+     JSON.stringify({ model: 'openai/gpt-oss-120b', max_tokens: 800, temperature: 0.3, messages: [{ role: 'user', content: prompt }] })],
     ['https://openrouter.ai/api/v1/chat/completions',
      { 'Content-Type': 'application/json', Authorization: `Bearer ${OR}`, 'HTTP-Referer': 'https://craudiovizai.com' },
      JSON.stringify({ model: 'deepseek/deepseek-v4-flash:free', max_tokens: 800, temperature: 0.3, messages: [{ role: 'user', content: prompt }] })],
