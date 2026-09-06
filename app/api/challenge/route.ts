@@ -184,7 +184,7 @@ async function getChallengeStatus(userId: string | null) {
   
   // Get current challenge info
   const { data: currentChallenge } = await supabase
-    .from('challenges')
+    .from('competitions')
     .select('*')
     .eq('status', 'active')
     .single();
@@ -231,7 +231,7 @@ async function enrollInChallenge(userId: string) {
   
   // Get or create current challenge
   let { data: challenge } = await supabase
-    .from('challenges')
+    .from('competitions')
     .select('*')
     .eq('status', 'active')
     .single();
@@ -242,7 +242,7 @@ async function enrollInChallenge(userId: string) {
     const endDate = new Date(startDate.getTime() + 90 * 24 * 60 * 60 * 1000);
     
     const { data: newChallenge, error: createError } = await supabase
-      .from('challenges')
+      .from('competitions')
       .insert({
         name: `90-Day Challenge - ${startDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`,
         start_date: startDate.toISOString(),
@@ -288,7 +288,7 @@ async function enrollInChallenge(userId: string) {
   
   // Update participant count
   await supabase
-    .from('challenges')
+    .from('competitions')
     .update({ participant_count: (challenge.participant_count || 0) + 1 })
     .eq('id', challenge.id);
   
