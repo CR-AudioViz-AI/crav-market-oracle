@@ -535,7 +535,7 @@ export async function voteEnhancement(
 ) {
   // Upsert vote
   await supabase
-    .from('javariverse_enhancement_votes')
+    .from('enhancement_votes')
     .upsert({
       enhancement_id: enhancementId,
       user_id: userId,
@@ -546,7 +546,7 @@ export async function voteEnhancement(
     
   // Update vote count
   const { data: votes } = await supabase
-    .from('javariverse_enhancement_votes')
+    .from('enhancement_votes')
     .select('vote')
     .eq('enhancement_id', enhancementId);
     
