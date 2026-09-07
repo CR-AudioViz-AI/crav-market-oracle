@@ -191,6 +191,6 @@ Be specific with numbers and percentages.`;
       generatedAt: new Date().toISOString()
     });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: 'The request could not be completed.', code: 'INTERNAL_ERROR' }, { status: 500 });
   }
 }
