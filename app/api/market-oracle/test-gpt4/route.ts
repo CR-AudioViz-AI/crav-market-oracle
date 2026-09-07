@@ -126,6 +126,6 @@ export async function GET(req: NextRequest) {
   } catch (error: any) {
     log.push('');
     log.push(`❌ ERROR: ${error.message}`);
-    return NextResponse.json({ success: false, log, error: error.message });
+    return NextResponse.json({ success: false, log, error: 'The request could not be completed.', code: 'INTERNAL_ERROR' });
   }
 }
