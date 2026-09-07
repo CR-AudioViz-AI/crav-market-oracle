@@ -138,7 +138,7 @@ export async function GET(request: NextRequest) {
     console.error('Leaderboard API error:', error);
     return NextResponse.json({
       success: false,
-      error: error.message
+      error: 'The request could not be completed.', code: 'INTERNAL_ERROR'
     }, { status: 500 });
   }
 }
@@ -220,7 +220,7 @@ export async function POST(request: NextRequest) {
     console.error('Leaderboard recalculation error:', error);
     return NextResponse.json({
       success: false,
-      error: error.message
+      error: 'The request could not be completed.', code: 'INTERNAL_ERROR'
     }, { status: 500 });
   }
 }
